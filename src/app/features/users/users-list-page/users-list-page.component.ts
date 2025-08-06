@@ -24,4 +24,10 @@ export class UsersListPageComponent {
   goToEdit(id: number): void {
     this.router.navigate(['/users', id]);
   }
+
+  logout(): void {
+    // Implement logout logic here, e.g., clearing the token and redirecting to login
+    // this.facade.logout(); // Assuming logout method exists in UsersFacadeService
+    this.router.navigate(['/auth']);
+  }
 }

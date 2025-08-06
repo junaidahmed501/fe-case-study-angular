@@ -1,5 +1,9 @@
 <h2>Users</h2>
-<button mat-raised-button color="primary" (click)="goToNew()">Add User</button>
+<div class="">
+  <button mat-raised-button color="primary" (click)="goToNew()">Add User</button>
+
+  <button mat-raised-button color="primary" (click)="logout()">Logout</button>
+</div>
 
 @if (!facade.loading()) {
   <app-users-list
