@@ -8,7 +8,7 @@ import {environment} from '../../../environments/environment';
 export class AuthService {
   private readonly http: HttpClient = inject(HttpClient);
 
-  private readonly authUrl: string = environment.apiEndpoints.auth;
+  private readonly loginUrl: string = `${environment.apiBaseUrl}/${environment.endpoints.auth.login}`;
 
   /**
    * Login method to authenticate a user.
@@ -17,6 +17,6 @@ export class AuthService {
    * @returns An Observable of AuthResponse containing the authentication token and user details.
    */
   login(username: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.authUrl, { username, password });
+    return this.http.post<AuthResponse>(this.loginUrl, { username, password });
   }
 }

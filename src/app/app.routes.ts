@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 import { USERS_PATH } from './features/users/users.routes';
 
+// todo: convert them to standalone routes
+// https://angular.io/guide/standalone-components#standalone-routes
+
 export const routes: Routes = [
   {
     path: 'auth',
