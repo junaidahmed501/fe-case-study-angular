@@ -5,9 +5,9 @@
   <button mat-raised-button color="primary" (click)="logout()">Logout</button>
 </div>
 
-@if (!facade.loading()) {
+@if (!loading()) {
   <app-users-list
-    [users]="facade.users()"
+    [users]="usersSignal()"
     (edit)="goToEdit($event)"
   />
 } @else {

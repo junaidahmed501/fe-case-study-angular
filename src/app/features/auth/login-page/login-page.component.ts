@@ -2,9 +2,9 @@ import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatCard } from '@angular/material/card';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { MatButton } from '@angular/material/button';
+import { AuthFacadeService } from '../../../core/facades/auth-facade.service';
 
 // todo: move it out
 export interface LoginFormGroupModel {
@@ -28,7 +28,7 @@ export interface LoginFormGroupModel {
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
-  private readonly authService: AuthService = inject(AuthService);
+  private readonly authFacade: AuthFacadeService = inject(AuthFacadeService);
   private readonly router = inject(Router);
 
   readonly error: WritableSignal<string> = signal('');
@@ -40,13 +40,11 @@ export class LoginPageComponent {
 
   submit(): void {
     const formValue = this.form.getRawValue();
-    this.authService.login(formValue.username, formValue.password).subscribe({
-      next: (response) => {
-        localStorage.setItem('authToken', response.token);
+    this.authFacade.login(formValue.username, formValue.password).subscribe({
+      next: () => {
         this.error.set('');
         this.form.reset();
-        // Navigate to the users page after successful login
-        this.router.navigate(['/users']); // replace the hardcoded path with a constant
+        // Navigation is handled in the authFacade
       },
       error: (err) => {
         console.error('Login failed', err);

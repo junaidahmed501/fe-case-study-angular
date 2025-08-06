@@ -3,14 +3,12 @@ import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../services/auth.service';
-import { TokenStorageService } from '../services/token-storage.service';
 import { AuthStore } from '../stores/auth.store';
 import { AuthResponse } from '../../shared/models/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private readonly authService: AuthService = inject(AuthService);
-  private readonly tokenStorageService: TokenStorageService = inject(TokenStorageService);
   private readonly authStore: AuthStore = inject(AuthStore);
   private readonly router: Router = inject(Router);
 
@@ -26,7 +24,7 @@ export class AuthFacadeService {
    * Initialize the authentication state based on the stored token
    */
   initializeAuth(): void {
-    const token = this.tokenStorageService.getToken();
+    const token = this.authService.getToken();
     if (token) {
       // If we have token, we consider the user authenticated
       // In a real app, you might want to validate the token with the server or decode it to get user info
@@ -43,7 +41,7 @@ export class AuthFacadeService {
   login(username: string, password: string): Observable<AuthResponse> {
     return this.authService.login(username, password).pipe(
       tap((response: AuthResponse) => {
-        this.tokenStorageService.saveToken(response.token);
+        this.authService.saveToken(response.token);
         this.authStore.setAuthenticated(response.user);
         this.router.navigate(['/users']);
       })
@@ -54,7 +52,7 @@ export class AuthFacadeService {
    * Logout the user
    */
   logout(): void {
-    this.tokenStorageService.clearToken();
+    this.authService.clearToken();
     this.authStore.clearAuthentication();
     this.router.navigate(['/auth']);
   }
@@ -64,6 +62,6 @@ export class AuthFacadeService {
    * @returns True if authenticated, false otherwise
    */
   isAuthenticated(): boolean {
-    return !!this.tokenStorageService.getToken();
+    return !!this.authService.getToken();
   }
 }
