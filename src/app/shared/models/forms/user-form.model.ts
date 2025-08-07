@@ -1,10 +1,8 @@
-import {FormControl} from '@angular/forms';
-
 /**
- * Interface for the user form controls with proper typing
+ * Interface for the user form value
  */
 export interface UserFormModel {
-  username: FormControl<string | null>;
-  role: FormControl<string | null>;
-  password: FormControl<string | null>;
+  username: string | null;
+  role: string | null;
+  password: string | null;
 }

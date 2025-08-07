@@ -3,7 +3,7 @@ import {inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError} from 'rxjs';
 import {AuthFacadeService} from '../facades/auth-facade.service';
-import {environment} from '../../../environments/environment';
+import {AUTH_API} from '../../shared/constants/api';
 
 // Token refresh logic
 let isRefreshing = false;
@@ -21,7 +21,7 @@ export const authInterceptor: HttpInterceptorFn = (
   const router = inject(Router);
 
   // Skip adding the token for authentication endpoints
-  if (req.url.includes(environment.endpoints.auth.login)) {
+  if (req.url.includes(AUTH_API.LOGIN)) {
     return next(req);
   }
 

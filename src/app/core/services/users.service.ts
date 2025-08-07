@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   addUser(user: Partial<User>): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
+    return this.http.post<User>(`${this.apiUrl}/${USERS_API.CREATE}`, user);
   }
 
   editUser(user: Partial<User>): Observable<User> {

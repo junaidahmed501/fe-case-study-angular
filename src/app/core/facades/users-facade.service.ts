@@ -2,10 +2,19 @@ import {inject, Injectable} from '@angular/core';
 import {UserStore} from '../stores/users.store';
 import {UsersService} from '../services/users.service';
 import {User} from '../../shared/models/user';
-import {finalize, Observable, tap} from 'rxjs';
+import {catchError, finalize, map, Observable, of, tap} from 'rxjs';
 import {UserFormService} from '../../features/users/services/user-form.service';
 import {FormGroup} from '@angular/forms';
+import {UserFormGroupModel} from '../../shared/models/forms/user-form-group.model';
 import {UserFormModel} from '../../shared/models/forms/user-form.model';
+import {UserToSave} from '../../shared/models/forms/user-form-to-save.model';
+
+// Define a result type for operations that can succeed or fail
+export interface OperationResult<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
@@ -47,28 +56,62 @@ export class UsersFacadeService {
     );
   }
 
-  saveUser(user: Partial<User>): void {
-    const action = user.id ? this.api.editUser(user) : this.api.addUser(user);
+  /**
+   * Save a new user with simplified error handling
+   * @param user The user data to save
+   * @returns Observable with operation result
+   */
+  saveUser(user: UserToSave): Observable<OperationResult<User>> {
     this.store.setLoading(true);
 
-    action.subscribe({
-      next: (saved) => {
-        this.store.upsertUser(saved);
-        this.store.setLoading(false);
-      },
-      error: () => {
-        this.store.setError('Failed to save user');
-        this.store.setLoading(false);
-      }
-    });
+    return this.api.addUser(user).pipe(
+      map(savedUser => {
+        this.store.upsertUser(savedUser);
+        this.store.setError('');
+        return { success: true, data: savedUser };
+      }),
+      catchError(error => {
+        const errorMessage = 'Failed to create user. The username may already exist.';
+        this.store.setError(errorMessage);
+        return of({ success: false, error: errorMessage });
+      }),
+      finalize(() => this.store.setLoading(false))
+    );
+  }
+
+  /**
+   * Edit an existing user with simplified error handling
+   * @param user The user data to update
+   * @returns Observable with operation result
+   */
+  editUser(user: Partial<User>): Observable<OperationResult<User>> {
+    this.store.setLoading(true);
+
+    return this.api.editUser(user).pipe(
+      map(updatedUser => {
+        this.store.upsertUser(updatedUser);
+        this.store.setError('');
+        return { success: true, data: updatedUser };
+      }),
+      catchError(error => {
+        const errorMessage = 'Failed to update user. Please check your data and try again.';
+        this.store.setError(errorMessage);
+        return of({ success: false, error: errorMessage });
+      }),
+      finalize(() => this.store.setLoading(false))
+    );
   }
 
   // Form service methods
-  createUserForm(user: User | null = null): FormGroup<UserFormModel> {
+  createUserForm(user: User | null = null): FormGroup<UserFormGroupModel> {
     return this.formService.createUserForm(user);
   }
 
-  prepareUserDataToSave(formValue: any, existingUser: User | null = null): Partial<User> {
-    return this.formService.prepareUserData(formValue, existingUser);
+  prepareUserDataToSave(formValue: UserFormModel): UserToSave {
+    return this.formService.prepareUserDataToSave(formValue);
+  }
+
+  prepareUserDataToUpdate(id: string, formValue: UserFormModel): Partial<User> {
+    return this.formService.prepareUserDataToUpdate(id, formValue);
   }
 }

@@ -1,10 +1,10 @@
 @let userForm = form();
 
 @if (userForm) {
-  @let userNameRequired = userForm.get('username')?.hasError('required');
-  @let roleRequired = userForm.get('role')?.hasError('required');
-  @let passwordRequired = userForm.get('password')?.hasError('required');
-  @let passwordMinLength = userForm.get('password')?.hasError('minlength');
+<!--  @let userNameRequired = userForm.get('username')?.hasError('required');-->
+<!--  @let roleRequired = userForm.get('role')?.hasError('required');-->
+<!--  @let passwordRequired = userForm.get('password')?.hasError('required');-->
+<!--  @let passwordMinLength = userForm.get('password')?.hasError('minlength');-->
 
   <form [formGroup]="userForm" (ngSubmit)="submit()">
     <mat-form-field appearance="fill">
@@ -41,10 +41,10 @@
     </mat-form-field>
 
     <div class="actions">
-      <button mat-flat-button color="primary" type="submit" [disabled]="userForm().invalid">
+      <button mat-flat-button color="primary" type="submit" [disabled]="userForm.invalid">
         {{ isEditMode() ? 'Update User' : 'Create User' }}
       </button>
-      <button mat-stroked-button type="button" (click)="cancel.emit()">Cancel</button>
+      <button mat-stroked-button type="button" (click)="onCancel.emit()">Cancel</button>
     </div>
   </form>
 }
