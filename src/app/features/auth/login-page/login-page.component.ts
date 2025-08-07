@@ -1,17 +1,16 @@
-import { Component, inject, signal, WritableSignal } from '@angular/core';
-import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { MatCard } from '@angular/material/card';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatCard} from '@angular/material/card';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatButton } from '@angular/material/button';
-import { AuthFacadeService } from '../../../core/facades/auth-facade.service';
+import {Router} from '@angular/router';
+import {MatButton} from '@angular/material/button';
+import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
 
 // todo: move it out
 export interface LoginFormGroupModel {
   username: FormControl<string>
   password: FormControl<string>
 }
-
 
 @Component({
   selector: 'app-login-page',
@@ -34,6 +33,9 @@ export class LoginPageComponent {
   readonly error: WritableSignal<string> = signal('');
 
   readonly form: FormGroup<LoginFormGroupModel> = new FormGroup({
+    // todo: consider using FormBuilder for cleaner code
+    // but it requires additional imports and setup
+    // https://angular.io/api/forms/FormBuilder
     username: new FormControl<string>('', { validators: Validators.required, nonNullable: true }),
     password: new FormControl<string>('', { validators: Validators.required, nonNullable: true })
   });
@@ -44,10 +46,9 @@ export class LoginPageComponent {
       next: () => {
         this.error.set('');
         this.form.reset();
-        // Navigation is handled in the authFacade
+        this.router.navigate(['/users']);
       },
       error: (err) => {
-        console.error('Login failed', err);
         this.error.set('Login failed. Please check your credentials and try again.');
       }
     });

@@ -1,16 +1,14 @@
-import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import {inject, Injectable} from '@angular/core';
+import {Observable, tap} from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
-import { AuthStore } from '../stores/auth.store';
-import { AuthResponse } from '../../shared/models/auth';
+import {AuthService} from '../services/auth.service';
+import {AuthStore} from '../stores/auth.store';
+import {AuthResponse} from '../../shared/models/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private readonly authService: AuthService = inject(AuthService);
   private readonly authStore: AuthStore = inject(AuthStore);
-  private readonly router: Router = inject(Router);
 
   get isAuthenticated$(): Observable<boolean> {
     return this.authStore.isAuthenticated$;
@@ -24,7 +22,7 @@ export class AuthFacadeService {
    * Initialize the authentication state based on the stored token
    */
   initializeAuth(): void {
-    const token = this.authService.getToken();
+    const token = this.getToken();
     if (token) {
       // If we have token, we consider the user authenticated
       // In a real app, you might want to validate the token with the server or decode it to get user info
@@ -41,9 +39,8 @@ export class AuthFacadeService {
   login(username: string, password: string): Observable<AuthResponse> {
     return this.authService.login(username, password).pipe(
       tap((response: AuthResponse) => {
-        this.authService.saveToken(response.token);
+        this.saveToken(response.token);
         this.authStore.setAuthenticated(response.user);
-        this.router.navigate(['/users']);
       })
     );
   }
@@ -52,9 +49,8 @@ export class AuthFacadeService {
    * Logout the user
    */
   logout(): void {
-    this.authService.clearToken();
+    this.clearToken();
     this.authStore.clearAuthentication();
-    this.router.navigate(['/auth']);
   }
 
   /**
@@ -62,6 +58,29 @@ export class AuthFacadeService {
    * @returns True if authenticated, false otherwise
    */
   isAuthenticated(): boolean {
-    return !!this.authService.getToken();
+    return !!this.getToken();
+  }
+
+  /**
+   * Get auth token from storage
+   * @returns The stored token or null if not found
+   */
+  getToken(): string | null {
+    return this.authService.getToken();
+  }
+
+  /**
+   * Save auth token to storage
+   * @param token - The token to save
+   */
+  saveToken(token: string): void {
+    this.authService.saveToken(token);
+  }
+
+  /**
+   * Remove auth token from storage
+   */
+  clearToken(): void {
+    this.authService.clearToken();
   }
 }

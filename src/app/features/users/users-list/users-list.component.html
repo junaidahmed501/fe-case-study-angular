@@ -1,1 +1,30 @@
-<p>users-list works!</p>
+<div class="users-list">
+  @let userList = users();
+  @if (userList?.length) {
+    <table>
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (user of users(); track user.id) {
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <button mat-button color="primary" (click)="edit.emit(user.id)">Edit</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <div class="no-users">
+      <p>No users available</p>
+    </div>
+  }
+</div>
+

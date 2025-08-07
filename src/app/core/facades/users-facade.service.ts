@@ -1,7 +1,8 @@
-import { inject, Injectable } from '@angular/core';
-import { UserStore } from '../stores/users.store';
-import { UsersService } from '../services/users.service';
-import { User } from '../../shared/models/user';
+import {inject, Injectable} from '@angular/core';
+import {UserStore} from '../stores/users.store';
+import {UsersService} from '../services/users.service';
+import {User} from '../../shared/models/user';
+import {finalize, tap} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
@@ -15,16 +16,16 @@ export class UsersFacadeService {
 
   loadUsers(): void {
     this.store.setLoading(true);
-    this.api.getUsers().subscribe({
-      next: users => {
+    this.api.getUsers().pipe(
+      tap(users => {
         this.store.setUsers(users);
         this.store.setError('');
-        this.store.setLoading(false);
-      },
+      }),
+      finalize(() => this.store.setLoading(false)),
+    ).subscribe({
       error: err => {
         this.store.setError('Failed to load users');
-        this.store.setLoading(false);
-      }
+      },
     });
   }
 

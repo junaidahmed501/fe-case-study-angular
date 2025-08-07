@@ -1,8 +1,8 @@
-import {Component, inject, Signal} from '@angular/core';
-import { UsersListComponent } from '../users-list/users-list.component';
-import { MatButton } from '@angular/material/button';
-import { Router } from '@angular/router';
-import { UsersFacadeService } from '../../../core/facades/users-facade.service';
+import {Component, inject, OnInit, Signal} from '@angular/core';
+import {UsersListComponent} from '../users-list/users-list.component';
+import {MatButton} from '@angular/material/button';
+import {Router} from '@angular/router';
+import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
 import {User} from '../../../shared/models/user';
 
@@ -15,13 +15,17 @@ import {User} from '../../../shared/models/user';
   templateUrl: './users-list-page.component.html',
   styleUrl: './users-list-page.component.scss'
 })
-export class UsersListPageComponent {
+export class UsersListPageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly usersFacade = inject(UsersFacadeService);
   private readonly authFacade = inject(AuthFacadeService);
 
   usersSignal: Signal<User[]> = this.usersFacade.users;
   loading: Signal<boolean> = this.usersFacade.loading;
+
+  ngOnInit(): void {
+    this.usersFacade.loadUsers();
+  }
 
   goToNew(): void {
     this.router.navigate(['/users/create']);
@@ -32,10 +36,7 @@ export class UsersListPageComponent {
   }
 
   logout(): void {
-    // Implement logout logic here, e.g., clearing the token and redirecting to login
-    this.authFacade.logout(); // Assuming logout method exists in UsersFacadeService
-    // todo: this is not needed when redirect is already part of logout process.
-    // check if it's a good idea to put the routing within facade
+    this.authFacade.logout();
     this.router.navigate(['/auth']);
   }
 }
