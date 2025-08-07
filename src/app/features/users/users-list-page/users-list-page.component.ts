@@ -28,6 +28,7 @@ export class UsersListPageComponent implements OnInit {
   }
 
   goToNew(): void {
+    // todo: use constants for routes
     this.router.navigate(['/users/create']);
   }
 
