@@ -4,6 +4,7 @@ import {User} from '../../../shared/models/user';
 import {UserFormGroupModel} from '../../../shared/models/forms/user-form-group.model';
 import {UserToSave} from '../../../shared/models/forms/user-form-to-save.model';
 import {UserFormModel} from '../../../shared/models/forms/user-form.model';
+import {noTestUsernameValidator} from '../../../shared/validators/username.validators';
 
 @Injectable({ providedIn: 'root' })
 export class UserFormService {
@@ -15,7 +16,10 @@ export class UserFormService {
    */
   createUserForm(user: User | null = null): FormGroup<UserFormGroupModel> {
     const form = this.fb.group<UserFormGroupModel>({
-      username: this.fb.control(user?.username || '', Validators.required),
+      username: this.fb.control(
+        user?.username || '',
+        [Validators.required, noTestUsernameValidator()]
+      ),
       role: this.fb.control(user?.role || '', Validators.required),
       password: this.fb.control('')
     });
@@ -45,11 +49,6 @@ export class UserFormService {
       role: formValue.role || '',
       password: formValue.password || '',
     };
-
-    // // Only include password if it was entered
-    // if (formValue.password) {
-    //   userData.password = formValue.password;
-    // }
 
     return userData;
   }

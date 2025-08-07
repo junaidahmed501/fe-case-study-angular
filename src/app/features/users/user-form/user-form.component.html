@@ -1,17 +1,15 @@
 @let userForm = form();
 
 @if (userForm) {
-<!--  @let userNameRequired = userForm.get('username')?.hasError('required');-->
-<!--  @let roleRequired = userForm.get('role')?.hasError('required');-->
-<!--  @let passwordRequired = userForm.get('password')?.hasError('required');-->
-<!--  @let passwordMinLength = userForm.get('password')?.hasError('minlength');-->
-
   <form [formGroup]="userForm" (ngSubmit)="submit()">
     <mat-form-field appearance="fill">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" />
       @if (userForm.get('username')?.hasError('required')) {
         <mat-error>Username is required</mat-error>
+      }
+      @if (userForm.get('username')?.hasError('noTestUsername')) {
+        <mat-error>Username cannot contain the word 'test'</mat-error>
       }
     </mat-form-field>
 

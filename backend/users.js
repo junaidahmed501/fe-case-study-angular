@@ -42,7 +42,7 @@ router.post('/create', (req, res) => {
   }
 
   const newUser = {
-    id: Date.now(),
+    id: Date.now().toString(),
     username,
     password,
     role,
