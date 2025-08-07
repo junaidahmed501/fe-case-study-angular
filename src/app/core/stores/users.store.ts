@@ -1,5 +1,5 @@
-import { Injectable, signal } from '@angular/core';
-import { User } from '../../shared/models/user';
+import {Injectable, signal} from '@angular/core';
+import {User} from '../../shared/models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {
@@ -10,10 +10,6 @@ export class UserStore {
 
   setUsers(newUsers: User[]) {
     this.users.set(newUsers);
-  }
-
-  setUser(newUser: User) {
-    this.user.set(newUser);
   }
 
   setLoading(value: boolean) {

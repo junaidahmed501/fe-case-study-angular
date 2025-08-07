@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {LoginFormModel} from '../../../shared/models/forms/login-form.model';
+import {FormBuilder, Validators} from '@angular/forms';
+import {LoginFormControls, LoginFormGroup, LoginFormValues} from '../../../shared/models/forms/login-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFormService {
@@ -9,8 +9,8 @@ export class AuthFormService {
   /**
    * Creates a form group for user login
    */
-  createLoginForm(): FormGroup<LoginFormModel> {
-    return this.fb.group<LoginFormModel>({
+  createLoginForm(): LoginFormGroup {
+    return this.fb.group<LoginFormControls>({
       username: this.fb.control('', {
         validators: Validators.required,
         nonNullable: true
@@ -26,10 +26,7 @@ export class AuthFormService {
    * Prepares login data for submission
    * @param formValue The form values
    */
-  prepareLoginData(formValue: Partial<Record<keyof LoginFormModel, string>>): {
-    username: string;
-    password: string
-  } {
+  prepareLoginData(formValue: Partial<LoginFormValues>): LoginFormValues {
     return {
       username: formValue.username || '',
       password: formValue.password || ''

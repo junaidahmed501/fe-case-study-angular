@@ -1,9 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {User} from '../../../shared/models/user';
-import {UserFormGroupModel} from '../../../shared/models/forms/user-form-group.model';
-import {UserToSave} from '../../../shared/models/forms/user-form-to-save.model';
-import {UserFormModel} from '../../../shared/models/forms/user-form.model';
+import {FormBuilder, Validators} from '@angular/forms';
+import {CreateUserDto, UpdateUserDto, User} from '../../../shared/models/user.model';
+import {UserFormGroup, UserFormValues} from '../../../shared/models/forms/user-form.model';
 import {noTestUsernameValidator} from '../../../shared/validators/username.validators';
 
 @Injectable({ providedIn: 'root' })
@@ -14,8 +12,9 @@ export class UserFormService {
    * Creates a form group for user creation or editing
    * @param user Optional user data to populate the form
    */
-  createUserForm(user: User | null = null): FormGroup<UserFormGroupModel> {
-    const form = this.fb.group<UserFormGroupModel>({
+  createUserForm(user: User | null = null): UserFormGroup {
+    // Create the form with basic validators
+    const form = this.fb.group({
       username: this.fb.control(
         user?.username || '',
         [Validators.required, noTestUsernameValidator()]
@@ -24,7 +23,7 @@ export class UserFormService {
       password: this.fb.control('')
     });
 
-    // Configure password validation based on whether we're creating or editing
+    // Set password validation based on whether we're creating or editing
     if (!user?.id) {
       // For new users, password is required
       form.get('password')?.setValidators(Validators.required);
@@ -40,32 +39,36 @@ export class UserFormService {
   }
 
   /**
-   * Prepares user data for submission based on form values
-   * @param formValue The form values
+   * Prepares user data from form values
+   * @param formValues Form values from the user form
+   * @param userId Optional user ID for updates
    */
-  prepareUserDataToSave(formValue: UserFormModel): UserToSave {
-    const userData: UserToSave = {
-      username: formValue.username || '',
-      role: formValue.role || '',
-      password: formValue.password || '',
+  prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
+    // Base user data from form
+    const baseUserData = {
+      username: formValues.username || '',
+      role: formValues.role || '',
     };
 
-    return userData;
-  }
+    // For updating an existing user (with ID)
+    if (userId) {
+      const updateData: UpdateUserDto = {
+        id: userId,
+        ...baseUserData
+      };
 
-  prepareUserDataToUpdate(id: string, formValue: Partial<Record<keyof UserFormGroupModel, string | null>>, existingUser: User | null = null): Partial<User> {
-    const userData: Partial<User> = {
-      ...existingUser,
-      id,
-      username: formValue.username || '',
-      role: formValue.role || '',
-    };
+      // Only include password if provided (not empty)
+      if (formValues.password) {
+        updateData.password = formValues.password;
+      }
 
-    // Only include password if it was entered
-    if (formValue.password) {
-      userData.password = formValue.password;
+      return updateData;
     }
 
-    return userData;
+    // For creating a new user
+    return {
+      ...baseUserData,
+      password: formValues.password || '',
+    };
   }
 }

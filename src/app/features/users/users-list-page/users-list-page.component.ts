@@ -4,7 +4,7 @@ import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
-import {User} from '../../../shared/models/user';
+import {User} from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-users-list-page',

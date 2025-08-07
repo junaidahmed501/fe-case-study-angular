@@ -1,10 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthResponse} from '../../shared/models/auth';
 import {environment} from '../../../environments/environment';
 import {AUTH_API} from '../../shared/constants/api';
 import {STORAGE_KEYS} from '../../shared/constants/storage.constants';
+import {AuthResponse} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

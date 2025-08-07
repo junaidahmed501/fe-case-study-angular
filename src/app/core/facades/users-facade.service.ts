@@ -1,13 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {UserStore} from '../stores/users.store';
 import {UsersService} from '../services/users.service';
-import {User} from '../../shared/models/user';
 import {catchError, finalize, map, Observable, of, tap} from 'rxjs';
 import {UserFormService} from '../../features/users/services/user-form.service';
-import {FormGroup} from '@angular/forms';
-import {UserFormGroupModel} from '../../shared/models/forms/user-form-group.model';
-import {UserFormModel} from '../../shared/models/forms/user-form.model';
-import {UserToSave} from '../../shared/models/forms/user-form-to-save.model';
+import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model';
+import {UserFormGroup, UserFormValues} from '../../shared/models/forms/user-form.model';
 
 // Define a result type for operations that can succeed or fail
 export interface OperationResult<T> {
@@ -57,44 +54,31 @@ export class UsersFacadeService {
   }
 
   /**
-   * Save a new user with simplified error handling
-   * @param user The user data to save
+   * Create or update a user
+   * @param userData The user data to save or update
    * @returns Observable with operation result
    */
-  saveUser(user: UserToSave): Observable<OperationResult<User>> {
+  saveUser(userData: CreateUserDto | UpdateUserDto): Observable<OperationResult<User>> {
     this.store.setLoading(true);
 
-    return this.api.addUser(user).pipe(
+    // Determine if this is a create or update operation based on presence of id
+    const isUpdate = 'id' in userData && !!userData.id;
+
+    // Call the appropriate API method
+    const apiCall = isUpdate
+      ? this.api.editUser(userData as UpdateUserDto)
+      : this.api.addUser(userData as CreateUserDto);
+
+    // Process the response
+    return apiCall.pipe(
       map(savedUser => {
         this.store.upsertUser(savedUser);
         this.store.setError('');
         return { success: true, data: savedUser };
       }),
       catchError(error => {
-        const errorMessage = 'Failed to create user. The username may already exist.';
-        this.store.setError(errorMessage);
-        return of({ success: false, error: errorMessage });
-      }),
-      finalize(() => this.store.setLoading(false))
-    );
-  }
-
-  /**
-   * Edit an existing user with simplified error handling
-   * @param user The user data to update
-   * @returns Observable with operation result
-   */
-  editUser(user: Partial<User>): Observable<OperationResult<User>> {
-    this.store.setLoading(true);
-
-    return this.api.editUser(user).pipe(
-      map(updatedUser => {
-        this.store.upsertUser(updatedUser);
-        this.store.setError('');
-        return { success: true, data: updatedUser };
-      }),
-      catchError(error => {
-        const errorMessage = 'Failed to update user. Please check your data and try again.';
+        const action = isUpdate ? 'update' : 'create';
+        const errorMessage = `Failed to ${action} user. Please check your data and try again.`;
         this.store.setError(errorMessage);
         return of({ success: false, error: errorMessage });
       }),
@@ -103,15 +87,11 @@ export class UsersFacadeService {
   }
 
   // Form service methods
-  createUserForm(user: User | null = null): FormGroup<UserFormGroupModel> {
+  createUserForm(user: User | null = null): UserFormGroup {
     return this.formService.createUserForm(user);
   }
 
-  prepareUserDataToSave(formValue: UserFormModel): UserToSave {
-    return this.formService.prepareUserDataToSave(formValue);
-  }
-
-  prepareUserDataToUpdate(id: string, formValue: UserFormModel): Partial<User> {
-    return this.formService.prepareUserDataToUpdate(id, formValue);
+  prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
+    return this.formService.prepareUserData(formValues, userId);
   }
 }

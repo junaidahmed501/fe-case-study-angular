@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {User} from '../../shared/models/user';
+import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model';
 import {environment} from '../../../environments/environment';
 import {USERS_API} from '../../shared/constants/api';
 
@@ -19,11 +19,11 @@ export class UsersService {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  addUser(user: Partial<User>): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/${USERS_API.CREATE}`, user);
+  addUser(userData: CreateUserDto): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/${USERS_API.CREATE}`, userData);
   }
 
-  editUser(user: Partial<User>): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${user?.id}`, user);
+  editUser(userData: UpdateUserDto): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${userData?.id}`, userData);
   }
 }

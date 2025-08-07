@@ -1,9 +1,22 @@
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 
 /**
- * Interface for the login form controls with proper typing
+ * Form control types for login form
  */
-export interface LoginFormModel {
+export interface LoginFormControls {
   username: FormControl<string>;
   password: FormControl<string>;
 }
+
+/**
+ * Type for login form values
+ */
+export interface LoginFormValues {
+  username: string;
+  password: string;
+}
+
+/**
+ * Login form group type - used for strong typing of form group
+ */
+export type LoginFormGroup = FormGroup<LoginFormControls>;

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthResponse } from '../../shared/models/auth';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {AuthResponse} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {

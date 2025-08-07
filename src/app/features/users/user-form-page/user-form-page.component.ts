@@ -1,13 +1,12 @@
 import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {UserFormComponent} from '../user-form/user-form.component';
-import {User} from '../../../shared/models/user';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {Subject, takeUntil} from 'rxjs';
-import {FormGroup} from '@angular/forms';
-import {UserFormGroupModel} from '../../../shared/models/forms/user-form-group.model';
 import {CommonModule} from '@angular/common';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {User} from '../../../shared/models/user.model';
+import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
 
 @Component({
   selector: 'app-user-form-page',
@@ -71,31 +70,23 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleSubmit(form: FormGroup<UserFormGroupModel> | null): void {
+  handleSubmit(form: UserFormGroup | null): void {
     if (form && form.valid) {
-      if (!this.isEditMode()) {
-        // Create mode
-        const userData = this.facade.prepareUserDataToSave(form.getRawValue());
-        this.facade.saveUser(userData)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(result => {
-            if (result.success) {
-              this.goBack();
-            }
-            // If not successful, the error is already handled in the facade and displayed via the error signal
-          });
-      } else {
-        // Edit mode
-        const userData = this.facade.prepareUserDataToUpdate(this.user()!.id, form.getRawValue());
-        this.facade.editUser(userData)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(result => {
-            if (result.success) {
-              this.goBack();
-            }
-            // If not successful, the error is already handled in the facade and displayed via the error signal
-          });
-      }
+      const formValues = form.getRawValue();
+      const currentUserId = this.isEditMode() ? this.user()?.id : undefined;
+
+      // Use our unified prepare method that handles both create and update
+      const userData = this.facade.prepareUserData(formValues, currentUserId);
+
+      // Use the unified save method that handles both create and update
+      this.facade.saveUser(userData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(result => {
+          if (result.success) {
+            this.goBack();
+          }
+          // Error handling is done in the facade and displayed via the error signal
+        });
     }
   }
 

@@ -1,6 +1,6 @@
 import {Component, input, output, OutputEmitterRef} from '@angular/core';
-import {User} from '../../../shared/models/user';
 import {MatButton} from '@angular/material/button';
+import {User} from '../../../shared/models/user.model';
 
 @Component({
   selector: 'app-users-list',

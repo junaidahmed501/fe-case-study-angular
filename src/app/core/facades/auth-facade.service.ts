@@ -3,10 +3,9 @@ import {Observable, tap} from 'rxjs';
 
 import {AuthService} from '../services/auth.service';
 import {AuthStore} from '../stores/auth.store';
-import {AuthResponse} from '../../shared/models/auth';
 import {AuthFormService} from '../../features/auth/services/auth-form.service';
-import {FormGroup} from '@angular/forms';
-import {LoginFormModel} from '../../shared/models/forms/login-form.model';
+import {LoginFormGroup, LoginFormValues} from '../../shared/models/forms/login-form.model';
+import {AuthResponse} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
@@ -92,7 +91,7 @@ export class AuthFacadeService {
    * Create a login form
    * @returns A FormGroup for the login form
    */
-  createLoginForm(): FormGroup<LoginFormModel> {
+  createLoginForm(): LoginFormGroup {
     return this.formService.createLoginForm();
   }
 
@@ -100,10 +99,7 @@ export class AuthFacadeService {
    * Prepare login data for submission
    * @param formValue The form values
    */
-  prepareLoginData(formValue: Partial<Record<keyof LoginFormModel, string>>): {
-    username: string;
-    password: string;
-  } {
+  prepareLoginData(formValue: Partial<LoginFormValues>): LoginFormValues {
     return this.formService.prepareLoginData(formValue);
   }
 }
