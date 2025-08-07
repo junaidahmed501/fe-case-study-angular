@@ -11,7 +11,7 @@ import {MatButton} from '@angular/material/button';
   styleUrl: './users-list.component.scss'
 })
 export class UsersListComponent {
-  users = input<User[]>();
+  users = input.required<User[]>();
 
   edit: OutputEmitterRef<number> = output();
 }

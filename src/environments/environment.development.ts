@@ -9,7 +9,7 @@ export const environment = {
       login: 'auth/login',
     },
     users: {
-      get: '',
+      base: 'users',
       detail: (id: string) => `users/${id}`,
     }
   }

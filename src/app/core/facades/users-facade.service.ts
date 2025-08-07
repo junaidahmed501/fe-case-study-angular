@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {UserStore} from '../stores/users.store';
 import {UsersService} from '../services/users.service';
 import {User} from '../../shared/models/user';
-import {finalize, tap} from 'rxjs';
+import {finalize, Observable, tap} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
@@ -10,7 +10,6 @@ export class UsersFacadeService {
   private api = inject(UsersService);
 
   users = this.store.users.asReadonly();
-  user = this.store.user.asReadonly();
   loading = this.store.loading.asReadonly();
   error = this.store.error.asReadonly();
 
@@ -27,6 +26,19 @@ export class UsersFacadeService {
         this.store.setError('Failed to load users');
       },
     });
+  }
+
+  /**
+   * Get a user by ID
+   * @param id The ID of the user to fetch
+   * @returns An Observable of the user
+   */
+  getUserById(id: string): Observable<User> {
+    this.store.setLoading(true);
+    return this.api.getUserById(id).pipe(
+      tap(() => this.store.setError('')),
+      finalize(() => this.store.setLoading(false))
+    );
   }
 
   saveUser(user: Partial<User>): void {
