@@ -31,7 +31,7 @@ export class UsersListPageComponent implements OnInit {
     this.router.navigate(['/users/create']);
   }
 
-  goToEdit(id: number): void {
+  goToEdit(id: string): void {
     this.router.navigate(['/users', id]);
   }
 

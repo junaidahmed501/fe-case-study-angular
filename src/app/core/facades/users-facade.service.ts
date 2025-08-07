@@ -3,16 +3,22 @@ import {UserStore} from '../stores/users.store';
 import {UsersService} from '../services/users.service';
 import {User} from '../../shared/models/user';
 import {finalize, Observable, tap} from 'rxjs';
+import {UserFormService} from '../../features/users/services/user-form.service';
+import {FormGroup} from '@angular/forms';
+import {UserFormModel} from '../../shared/models/forms/user-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
   private store = inject(UserStore);
   private api = inject(UsersService);
+  private formService = inject(UserFormService);
 
+  // Expose state as readonly signals
   users = this.store.users.asReadonly();
   loading = this.store.loading.asReadonly();
   error = this.store.error.asReadonly();
 
+  // User service methods
   loadUsers(): void {
     this.store.setLoading(true);
     this.api.getUsers().pipe(
@@ -55,5 +61,14 @@ export class UsersFacadeService {
         this.store.setLoading(false);
       }
     });
+  }
+
+  // Form service methods
+  createUserForm(user: User | null = null): FormGroup<UserFormModel> {
+    return this.formService.createUserForm(user);
+  }
+
+  prepareUserDataToSave(formValue: any, existingUser: User | null = null): Partial<User> {
+    return this.formService.prepareUserData(formValue, existingUser);
   }
 }

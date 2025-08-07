@@ -4,11 +4,15 @@ import {Observable, tap} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {AuthStore} from '../stores/auth.store';
 import {AuthResponse} from '../../shared/models/auth';
+import {AuthFormService} from '../../features/auth/services/auth-form.service';
+import {FormGroup} from '@angular/forms';
+import {LoginFormModel} from '../../shared/models/forms/login-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private readonly authService: AuthService = inject(AuthService);
   private readonly authStore: AuthStore = inject(AuthStore);
+  private readonly formService = inject(AuthFormService);
 
   get isAuthenticated$(): Observable<boolean> {
     return this.authStore.isAuthenticated$;
@@ -82,5 +86,24 @@ export class AuthFacadeService {
    */
   clearToken(): void {
     this.authService.clearToken();
+  }
+
+  /**
+   * Create a login form
+   * @returns A FormGroup for the login form
+   */
+  createLoginForm(): FormGroup<LoginFormModel> {
+    return this.formService.createLoginForm();
+  }
+
+  /**
+   * Prepare login data for submission
+   * @param formValue The form values
+   */
+  prepareLoginData(formValue: Partial<Record<keyof LoginFormModel, string>>): {
+    username: string;
+    password: string;
+  } {
+    return this.formService.prepareLoginData(formValue);
   }
 }

@@ -13,5 +13,5 @@ import {MatButton} from '@angular/material/button';
 export class UsersListComponent {
   users = input.required<User[]>();
 
-  edit: OutputEmitterRef<number> = output();
+  edit: OutputEmitterRef<string> = output();
 }

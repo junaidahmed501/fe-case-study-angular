@@ -1,31 +1,50 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <mat-form-field appearance="fill">
-    <mat-label>Username</mat-label>
-    <input matInput formControlName="username" />
-    <mat-error *ngIf="form.get('username')?.hasError('required')">Username is required</mat-error>
-  </mat-form-field>
+@let userForm = form();
 
-  <mat-form-field appearance="fill">
-    <mat-label>Role</mat-label>
-    <mat-select formControlName="role">
-      <mat-option value="admin">Admin</mat-option>
-      <mat-option value="user">User</mat-option>
-    </mat-select>
-    <mat-error *ngIf="form.get('role')?.hasError('required')">Role is required</mat-error>
-  </mat-form-field>
+@if (userForm) {
+  @let userNameRequired = userForm.get('username')?.hasError('required');
+  @let roleRequired = userForm.get('role')?.hasError('required');
+  @let passwordRequired = userForm.get('password')?.hasError('required');
+  @let passwordMinLength = userForm.get('password')?.hasError('minlength');
 
-  <mat-form-field appearance="fill">
-    <mat-label>Password</mat-label>
-    <input matInput type="password" formControlName="password" />
-    <mat-hint *ngIf="isEditMode">Leave blank to keep current password</mat-hint>
-    <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
-    <mat-error *ngIf="form.get('password')?.hasError('minlength')">Password must be at least 6 characters</mat-error>
-  </mat-form-field>
+  <form [formGroup]="userForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" />
+      @if (userForm.get('username')?.hasError('required')) {
+        <mat-error>Username is required</mat-error>
+      }
+    </mat-form-field>
 
-  <div class="actions">
-    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
-      {{ isEditMode ? 'Update User' : 'Create User' }}
-    </button>
-    <button mat-stroked-button type="button" (click)="cancel.emit()">Cancel</button>
-  </div>
-</form>
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="user">User</mat-option>
+      </mat-select>
+      @if (userForm.get('role')?.hasError('required')) {
+        <mat-error>Role is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+      @if (isEditMode()) {
+        <mat-hint>Leave blank to keep the current password</mat-hint>
+      }
+      @if (userForm.get('password')?.hasError('required')) {
+        <mat-error>Password is required</mat-error>
+      }
+      @if (userForm.get('password')?.hasError('minlength')) {
+        <mat-error>Password must be at least 6 characters long</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button color="primary" type="submit" [disabled]="userForm().invalid">
+        {{ isEditMode() ? 'Update User' : 'Create User' }}
+      </button>
+      <button mat-stroked-button type="button" (click)="cancel.emit()">Cancel</button>
+    </div>
+  </form>
+}

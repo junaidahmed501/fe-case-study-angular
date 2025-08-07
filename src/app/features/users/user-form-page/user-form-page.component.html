@@ -3,7 +3,7 @@
 @if (!loading()) {
   <app-user-form
     [user]="user()"
-    (save)="handleSave($event)"
+    (onEntry)="handleSave($event)"
     (cancel)="goBack()"
   />
 } @else {

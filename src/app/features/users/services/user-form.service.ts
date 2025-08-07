@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User} from '../../../shared/models/user';
+import {UserFormModel} from '../../../shared/models/forms/user-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserFormService {
@@ -10,11 +11,11 @@ export class UserFormService {
    * Creates a form group for user creation or editing
    * @param user Optional user data to populate the form
    */
-  createUserForm(user: User | null = null): FormGroup {
-    const form = this.fb.group({
-      username: [user?.username || '', Validators.required],
-      role: [user?.role || '', Validators.required],
-      password: ['']
+  createUserForm(user: User | null = null): FormGroup<UserFormModel> {
+    const form = this.fb.group<UserFormModel>({
+      username: this.fb.control(user?.username || '', Validators.required),
+      role: this.fb.control(user?.role || '', Validators.required),
+      password: this.fb.control('')
     });
 
     // Configure password validation based on whether we're creating or editing
@@ -37,11 +38,26 @@ export class UserFormService {
    * @param formValue The form values
    * @param existingUser Optional existing user data to merge with
    */
-  prepareUserData(formValue: any, existingUser: User | null = null): Partial<User> {
+  prepareUserDataToSave(formValue: Partial<Record<keyof UserFormModel, string | null>>, existingUser: User | null = null): Partial<User> {
     const userData: Partial<User> = {
       ...existingUser,
-      username: formValue.username,
-      role: formValue.role,
+      username: formValue.username || '',
+      role: formValue.role || '',
+    };
+
+    // Only include password if it was entered
+    if (formValue.password) {
+      userData.password = formValue.password;
+    }
+
+    return userData;
+  }
+
+  prepareUserDataToUpdate(formValue: Partial<Record<keyof UserFormModel, string | null>>, existingUser: User | null = null): Partial<User> {
+    const userData: Partial<User> = {
+      ...existingUser,
+      username: formValue.username || '',
+      role: formValue.role || '',
     };
 
     // Only include password if it was entered
