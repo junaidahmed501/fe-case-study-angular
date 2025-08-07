@@ -8,6 +8,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {User} from '../../../shared/models/user.model';
 import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
+import {FormErrorComponent} from '../../../shared/components/form-error/form-error.component';
 
 @Component({
   selector: 'app-user-form',
@@ -19,7 +20,8 @@ import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatHint
+    MatHint,
+    FormErrorComponent
   ],
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.scss'
@@ -49,6 +51,17 @@ export class UserFormComponent {
   }
 
   submit(): void {
-    this.onSubmit.emit(this.form());
+    if (this.form()) {
+      // // Mark all fields as touched to show validation errors
+      // Object.keys(this.form()!.controls).forEach(key => {
+      //   const control = this.form()!.get(key);
+      //   control?.markAsTouched();
+      // });
+      this.form()?.markAllAsTouched();
+
+      if (this.form()!.valid) {
+        this.onSubmit.emit(this.form());
+      }
+    }
   }
 }

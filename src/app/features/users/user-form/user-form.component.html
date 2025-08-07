@@ -5,12 +5,9 @@
     <mat-form-field appearance="fill">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" />
-      @if (userForm.get('username')?.hasError('required')) {
-        <mat-error>Username is required</mat-error>
-      }
-      @if (userForm.get('username')?.hasError('noTestUsername')) {
-        <mat-error>Username cannot contain the word 'test'</mat-error>
-      }
+      <app-form-error
+        [control]="$any(userForm.get('username'))"
+      ></app-form-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -19,9 +16,9 @@
         <mat-option value="admin">Admin</mat-option>
         <mat-option value="user">User</mat-option>
       </mat-select>
-      @if (userForm.get('role')?.hasError('required')) {
-        <mat-error>Role is required</mat-error>
-      }
+      <app-form-error
+        [control]="$any(userForm.get('role'))"
+      ></app-form-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
@@ -30,16 +27,13 @@
       @if (isEditMode()) {
         <mat-hint>Leave blank to keep the current password</mat-hint>
       }
-      @if (userForm.get('password')?.hasError('required')) {
-        <mat-error>Password is required</mat-error>
-      }
-      @if (userForm.get('password')?.hasError('minlength')) {
-        <mat-error>Password must be at least 6 characters long</mat-error>
-      }
+      <app-form-error
+        [control]="$any(userForm.get('password'))"
+      ></app-form-error>
     </mat-form-field>
 
     <div class="actions">
-      <button mat-flat-button color="primary" type="submit" [disabled]="userForm.invalid">
+      <button mat-flat-button color="primary" type="submit">
         {{ isEditMode() ? 'Update User' : 'Create User' }}
       </button>
       <button mat-stroked-button type="button" (click)="onCancel.emit()">Cancel</button>

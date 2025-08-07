@@ -20,19 +20,20 @@ export class UserFormService {
         [Validators.required, noTestUsernameValidator()]
       ),
       role: this.fb.control(user?.role || '', Validators.required),
-      password: this.fb.control('')
+      password: this.fb.control(user?.password || '' , Validators.minLength(3))
     });
 
     // Set password validation based on whether we're creating or editing
     if (!user?.id) {
       // For new users, password is required
-      form.get('password')?.setValidators(Validators.required);
-    } else {
-      // For existing users, password is optional but if provided must meet requirements
-      form.get('password')?.setValidators(
-        (control) => control.value ? Validators.minLength(6)(control) : null
-      );
+      form.get('password')?.addValidators(Validators.required);
     }
+    // else {
+    //   // For existing users, password is optional but if provided must meet requirements
+    //   form.get('password')?.setValidators(
+    //     (control) => control.value ? Validators.minLength(3)(control) : null
+    //   );
+    // }
     form.get('password')?.updateValueAndValidity();
 
     return form;

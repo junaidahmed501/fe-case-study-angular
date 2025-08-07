@@ -5,19 +5,21 @@
     <mat-form-field appearance="fill">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username"/>
+      <app-form-error [control]="$any(form.get('username'))"></app-form-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Password</mat-label>
       <input matInput type="password" formControlName="password"/>
+      <app-form-error [control]="$any(form.get('password'))"></app-form-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+    <button mat-raised-button color="primary" type="submit">
       Login
     </button>
 
     @if (error()) {
-      <p>{{ error() }}</p>
+      <p class="server-error">{{ error() }}</p>
     }
   </form>
 </mat-card>
