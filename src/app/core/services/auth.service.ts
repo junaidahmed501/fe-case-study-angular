@@ -6,6 +6,10 @@ import {API} from '../../shared/constants/api.constants';
 import {STORAGE} from '../../shared/constants/storage.constants';
 import {AuthResponse} from '../../shared/models/auth-response.model';
 
+/**
+ * Service responsible for authentication operations
+ * Handles API interactions for login and token management
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http: HttpClient = inject(HttpClient);
@@ -14,35 +18,12 @@ export class AuthService {
   private readonly tokenKey: string = STORAGE.AUTH_TOKEN;
 
   /**
-   * Login method to authenticate a user.
-   * @param username - The username of the user.
-   * @param password - The password of the user.
-   * @returns {Observable<AuthResponse>} Authentication token and user details.
+   * Authenticates user with the backend
+   * @param username - User's username
+   * @param password - User's password
+   * @returns Authentication response with token and user data
    */
   login(username: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(this.loginUrl, { username, password });
-  }
-
-  /**
-   * Save auth token to local storage
-   * @param token - The token to save
-   */
-  saveToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token);
-  }
-
-  /**
-   * Get auth token from local storage
-   * @returns The stored token or null if not found
-   */
-  getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
-
-  /**
-   * Remove auth token from local storage
-   */
-  clearToken(): void {
-    localStorage.removeItem(this.tokenKey);
   }
 }

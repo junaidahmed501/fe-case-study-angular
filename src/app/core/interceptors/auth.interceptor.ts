@@ -6,10 +6,9 @@ import {AuthFacadeService} from '../facades/auth-facade.service';
 import {API} from '../../shared/constants/api.constants';
 
 /**
- * Auth Interceptor - adds auth token to requests and handles 401 errors
- * @param req The outgoing request
- * @param next The next handler in the chain
- * @returns The processed request observable
+ * Intercepts HTTP requests to add auth token and handle authentication errors
+ * Skips token for login requests and adds Bearer token to all others
+ * Handles 401 errors by logging out the user
  */
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
@@ -44,10 +43,8 @@ export const authInterceptor: HttpInterceptorFn = (
 };
 
 /**
- * Adds the auth token to the request headers
- * @param req Original request
- * @param token Authentication token
- * @returns Cloned request with auth header
+ * Adds authentication token to request headers
+ * Clones the request to maintain immutability
  */
 function addTokenToRequest(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return req.clone({
@@ -56,3 +53,4 @@ function addTokenToRequest(req: HttpRequest<unknown>, token: string): HttpReques
     }
   });
 }
+

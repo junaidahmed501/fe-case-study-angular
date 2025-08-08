@@ -8,6 +8,10 @@ import {LoginFormGroup, LoginFormValues} from '../../shared/models/forms/login-f
 import {AuthResponse} from '../../shared/models/auth-response.model';
 import {STORAGE} from '../../shared/constants/storage.constants';
 
+/**
+ * Facade for authentication operations that coordinates between auth service and store
+ * Provides a simplified API for components to use for auth-related operations
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
   private readonly authService: AuthService = inject(AuthService);
@@ -22,14 +26,13 @@ export class AuthFacadeService {
   }
 
   /**
-   * Initialize the authentication state based on the stored token
-   * Should be called once during app initialization
+   * Initialize the authentication state based on stored token
+   * Called during app bootstrap through APP_INITIALIZER
    */
   initializeAuth(): void {
     const token = localStorage.getItem(STORAGE.AUTH_TOKEN);
 
     if (token) {
-      // If we have token, we consider the user authenticated
       this.authStore.setAuthenticated({ id: 0, username: '', role: '' }); // Placeholder user
       this.isAuthenticated.set(true);
     } else {
@@ -44,37 +47,34 @@ export class AuthFacadeService {
   }
 
   /**
-   * Creates a form group for login
+   * Creates a form group for login with required validators
    */
   createLoginForm(): LoginFormGroup {
     return this.formService.createLoginForm();
   }
 
   /**
-   * Prepares login data from form values
+   * Prepares login data from form values for submission
    */
   prepareLoginData(formValues: LoginFormValues): LoginFormValues {
     return this.formService.prepareLoginData(formValues);
   }
 
   /**
-   * Login the user
-   * @param username - The username
-   * @param password - The password
-   * @returns An observable of the authentication response
+   * Authenticates user with provided credentials
+   * Updates auth state on success
    */
   login(username: string, password: string): Observable<AuthResponse> {
     return this.authService.login(username, password).pipe(
       tap((response: AuthResponse) => {
         this.saveToken(response.token);
         this.authStore.setAuthenticated(response.user);
-        // Signal is updated via subscription to isAuthenticated$
       })
     );
   }
 
   /**
-   * Logout the user
+   * Logs out the current user and clears authentication state
    */
   logout(): void {
     this.clearToken();
@@ -83,7 +83,7 @@ export class AuthFacadeService {
   }
 
   /**
-   * Get the authentication token from local storage
+   * Gets the current auth token from storage
    */
   getToken(): string | null {
     return localStorage.getItem(STORAGE.AUTH_TOKEN);

@@ -6,13 +6,20 @@ import {UserFormService} from '../../features/users/services/user-form.service';
 import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model';
 import {UserFormGroup, UserFormValues} from '../../shared/models/forms/user-form.model';
 
-// Define a result type for operations that can succeed or fail
+/**
+ * Represents the result of user operations that can succeed or fail
+ */
 export interface OperationResult<T> {
   success: boolean;
   data?: T;
   error?: string;
 }
 
+/**
+ * Facade for user management operations
+ * Coordinates between user service, store, and form service
+ * Provides a unified API for components to interact with
+ */
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
   private readonly store = inject(UserStore);
@@ -23,8 +30,9 @@ export class UsersFacadeService {
   readonly loading = this.store.loading.asReadonly();
   readonly error = this.store.error.asReadonly();
 
-    /**
-   * Load all users from the API
+  /**
+   * Fetches all users from the API and updates the store
+   * Sets loading state and handles errors
    */
   loadUsers(): void {
     this.store.setLoading(true);
@@ -35,16 +43,16 @@ export class UsersFacadeService {
       }),
       finalize(() => this.store.setLoading(false)),
     ).subscribe({
-      error: err => {
+      error: () => {
         this.store.setError('Failed to load users');
       },
     });
   }
 
   /**
-   * Get a user by ID
-   * @param id The ID of the user to fetch
-   * @returns An Observable of the user
+   * Fetches a specific user by ID
+   * @param id User ID to retrieve
+   * @returns Observable of the user data
    */
   getUserById(id: string): Observable<User> {
     this.store.setLoading(true);
@@ -55,22 +63,18 @@ export class UsersFacadeService {
   }
 
   /**
-   * Create or update a user
-   * @param userData The user data to save or update
+   * Creates or updates a user based on provided data
+   * @param userData User data for create/update operation
    * @returns Observable with operation result
    */
   saveUser(userData: CreateUserDto | UpdateUserDto): Observable<OperationResult<User>> {
     this.store.setLoading(true);
 
-    // Determine if this is a create or update operation based on presence of id
     const isUpdate = 'id' in userData && !!userData.id;
-
-    // Call the appropriate API method
     const apiCall = isUpdate
       ? this.api.editUser(userData as UpdateUserDto)
       : this.api.addUser(userData as CreateUserDto);
 
-    // Process the response
     return apiCall.pipe(
       map(savedUser => {
         this.store.upsertUser(savedUser);
@@ -88,19 +92,19 @@ export class UsersFacadeService {
   }
 
   /**
-   * Create a user form with optional initial data
-   * @param user Optional user data to populate the form
-   * @returns A typed form group for user data
+   * Creates a user form with optional initial data
+   * @param user User data to populate the form with
+   * @returns Typed form group for user operations
    */
   createUserForm(user: User | null = null): UserFormGroup {
     return this.formService.createUserForm(user);
   }
 
   /**
-   * Prepare user data from form values for API submission
-   * @param formValues The form values to process
-   * @param userId Optional user ID for updates
-   * @returns Data object ready for API
+   * Prepares user data from form values for API submission
+   * @param formValues Values from the user form
+   * @param userId Optional ID for update operations
+   * @returns Data object ready for API submission
    */
   prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
     return this.formService.prepareUserData(formValues, userId);

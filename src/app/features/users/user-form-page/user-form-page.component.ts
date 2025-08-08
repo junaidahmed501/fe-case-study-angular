@@ -9,6 +9,10 @@ import {User} from '../../../shared/models/user.model';
 import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
 import {ROUTES} from '../../../shared/constants/routes.constants';
 
+/**
+ * Container component for user creation and editing
+ * Handles form initialization, data loading, and saving
+ */
 @Component({
   selector: 'app-user-form-page',
   imports: [
@@ -33,6 +37,9 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
+  /**
+   * Initializes component by extracting route params and loading user data if in edit mode
+   */
   ngOnInit(): void {
     this.route.paramMap
       .pipe(takeUntil(this.destroy$))
@@ -46,11 +53,18 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Cleans up subscriptions when component is destroyed
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  /**
+   * Handles form submission for user creation or update
+   * @param form The validated user form group
+   */
   handleSubmit(form: UserFormGroup | null): void {
     if (form && form.valid) {
       const formValues = form.getRawValue();
@@ -68,10 +82,17 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Navigates back to users list
+   */
   goBack(): void {
     this.router.navigate([ROUTES.USERS]);
   }
 
+  /**
+   * Loads user data for editing by ID
+   * @param userId ID of user to load
+   */
   private loadUser(userId: string): void {
     this.facade.getUserById(userId)
       .pipe(takeUntil(this.destroy$))

@@ -4,8 +4,9 @@ import {AuthFacadeService} from '../facades/auth-facade.service';
 import {ROUTES} from '../../shared/constants/routes.constants';
 
 /**
- * Unauthenticated guard to protect routes that should only be accessed by non-authenticated users
- * Redirects to the users page if the user is already authenticated
+ * Route guard that prevents authenticated users from accessing auth pages
+ * Redirects already authenticated users to the users page
+ * Useful for login/register pages that should only be accessible when logged out
  */
 export const unauthenticatedGuard: CanActivateFn = () => {
   const authFacade = inject(AuthFacadeService);

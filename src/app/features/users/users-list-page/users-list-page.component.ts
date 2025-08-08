@@ -9,6 +9,10 @@ import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ROUTES} from '../../../shared/constants/routes.constants';
 
+/**
+ * Container component for the users list view
+ * Manages data fetching, navigation, and user actions
+ */
 @Component({
   selector: 'app-users-list-page',
   imports: [
@@ -29,18 +33,31 @@ export class UsersListPageComponent implements OnInit {
   readonly usersSignal: Signal<User[]> = this.usersFacade.users;
   readonly loading: Signal<boolean> = this.usersFacade.loading;
 
+  /**
+   * Loads users data when component initializes
+   */
   ngOnInit(): void {
     this.usersFacade.loadUsers();
   }
 
+  /**
+   * Navigates to create user page
+   */
   goToNew(): void {
     this.router.navigate([ROUTES.USER_CREATE]);
   }
 
+  /**
+   * Navigates to edit page for specific user
+   * @param id ID of the user to edit
+   */
   goToEdit(id: string): void {
     this.router.navigate([ROUTES.getUserEdit(id)]);
   }
 
+  /**
+   * Logs the user out and redirects to login page
+   */
   logout(): void {
     this.authFacade.logout();
     this.router.navigate([ROUTES.AUTH]);

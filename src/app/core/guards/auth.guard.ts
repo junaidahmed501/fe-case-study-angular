@@ -4,8 +4,9 @@ import {AuthFacadeService} from '../facades/auth-facade.service';
 import {ROUTES} from '../../shared/constants/routes.constants';
 
 /**
- * Auth guard to protect routes that require authentication
- * Redirects to the auth page if the user is not authenticated
+ * Route guard that protects routes requiring authentication
+ * Uses reactive authentication state to determine access
+ * Redirects unauthenticated users to the auth page
  */
 export const authGuard: CanActivateFn = () => {
   const authFacade = inject(AuthFacadeService);
@@ -15,7 +16,6 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  // If not authenticated, redirect to auth page
   router.navigate([ROUTES.AUTH], { replaceUrl: true });
   return false;
 };

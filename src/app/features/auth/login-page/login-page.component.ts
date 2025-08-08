@@ -9,6 +9,10 @@ import {LoginFormGroup} from '../../../shared/models/forms/login-form.model';
 import {FormErrorComponent} from '../../../shared/components/form-error/form-error.component';
 import {MatError} from '@angular/material/form-field';
 
+/**
+ * Login page component that handles user authentication
+ * Displays login form and manages authentication flow
+ */
 @Component({
   selector: 'app-login-page',
   imports: [
@@ -32,6 +36,10 @@ export class LoginPageComponent {
   readonly error: WritableSignal<string> = signal('');
   readonly form: LoginFormGroup = this.authFacade.createLoginForm();
 
+    /**
+   * Handles form submission for login
+   * Validates form and authenticates user via auth facade
+   */
   submit(): void {
     if (this.form.valid) {
       const loginData = this.authFacade.prepareLoginData(this.form.getRawValue());
