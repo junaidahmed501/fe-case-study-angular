@@ -35,12 +35,14 @@ export class LoginPageComponent {
 
   readonly error: WritableSignal<string> = signal('');
   readonly form: LoginFormGroup = this.authFacade.createLoginForm();
+  readonly loading = this.authFacade.loading;
 
     /**
    * Handles form submission for login
    * Validates form and authenticates user via auth facade
    */
   submit(): void {
+      this.form.markAllAsTouched();
     if (this.form.valid) {
       const loginData = this.authFacade.prepareLoginData(this.form.getRawValue());
       this.authFacade.login(loginData.username, loginData.password).subscribe({
@@ -53,8 +55,6 @@ export class LoginPageComponent {
           this.error.set('Login failed. Please check your credentials and try again.');
         }
       });
-    } else {
-      this.form.markAllAsTouched();
     }
   }
 }

@@ -8,6 +8,7 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {User} from '../../../shared/models/user.model';
 import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
 import {ROUTES} from '../../../shared/constants/routes.constants';
+import {MatCard} from '@angular/material/card';
 
 /**
  * Container component for user creation and editing
@@ -18,7 +19,8 @@ import {ROUTES} from '../../../shared/constants/routes.constants';
   imports: [
     UserFormComponent,
     CommonModule,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatCard
   ],
   templateUrl: './user-form-page.component.html',
   styleUrl: './user-form-page.component.scss',

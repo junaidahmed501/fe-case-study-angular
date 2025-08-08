@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Injectable, signal} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {AuthUser} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
@@ -9,18 +9,16 @@ export class AuthStore {
     user: null
   });
 
-  /*
-    * Signal to track authentication state.
-    * Not implemented due to time constraints
-   */
-  // readonly loading = signal(false);
+  readonly isAuthenticated = signal<boolean>(false);
+  readonly loading = signal<boolean>(false);
+  readonly user = signal<AuthUser | null>(null);
 
-  get isAuthenticated$(): Observable<boolean> {
-    return new Observable<boolean>(observer => {
-      this.authState$.subscribe(state => {
-        observer.next(state.isAuthenticated);
-      });
-    });
+  /**
+   * Set the loading state
+   * @param value Loading state boolean
+   */
+  setLoading(value: boolean): void {
+    this.loading.set(value);
   }
 
   /**
@@ -32,6 +30,8 @@ export class AuthStore {
       isAuthenticated: true,
       user
     });
+    this.isAuthenticated.set(true);
+    this.user.set(user);
   }
 
   /**
@@ -42,5 +42,7 @@ export class AuthStore {
       isAuthenticated: false,
       user: null
     });
+    this.isAuthenticated.set(false);
+    this.user.set(null);
   }
 }

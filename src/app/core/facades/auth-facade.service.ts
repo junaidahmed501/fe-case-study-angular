@@ -1,5 +1,5 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {finalize, Observable, tap} from 'rxjs';
 
 import {AuthService} from '../services/auth.service';
 import {AuthStore} from '../stores/auth.store';
@@ -18,32 +18,21 @@ export class AuthFacadeService {
   private readonly authStore: AuthStore = inject(AuthStore);
   private readonly formService = inject(AuthFormService);
 
-  // Authentication state as a signal - will be exposed for components to consume
-  readonly isAuthenticated = signal<boolean>(false);
-
-  get isAuthenticated$(): Observable<boolean> {
-    return this.authStore.isAuthenticated$;
-  }
+  readonly isAuthenticated = this.authStore.isAuthenticated.asReadonly();
+  readonly loading = this.authStore.loading.asReadonly();
+  readonly user = this.authStore.user.asReadonly();
 
   /**
    * Initialize the authentication state based on stored token
-   * Called during app bootstrap through APP_INITIALIZER
    */
   initializeAuth(): void {
     const token = localStorage.getItem(STORAGE.AUTH_TOKEN);
 
     if (token) {
       this.authStore.setAuthenticated({ id: 0, username: '', role: '' }); // Placeholder user
-      this.isAuthenticated.set(true);
     } else {
       this.authStore.clearAuthentication();
-      this.isAuthenticated.set(false);
     }
-
-    // Subscribe to future auth state changes to keep signal in sync
-    this.isAuthenticated$.subscribe(isAuthenticated => {
-      this.isAuthenticated.set(isAuthenticated);
-    });
   }
 
   /**
@@ -62,13 +51,18 @@ export class AuthFacadeService {
 
   /**
    * Authenticates user with provided credentials
-   * Updates auth state on success
+   * Updates auth state on success and manages loading state
    */
   login(username: string, password: string): Observable<AuthResponse> {
+    this.authStore.setLoading(true);
+
     return this.authService.login(username, password).pipe(
       tap((response: AuthResponse) => {
         this.saveToken(response.token);
         this.authStore.setAuthenticated(response.user);
+      }),
+      finalize(() => {
+        this.authStore.setLoading(false);
       })
     );
   }

@@ -14,9 +14,9 @@
       <app-form-error [control]="$any(form.get('password'))"></app-form-error>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">
-      Login
-    </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+        Login {{loading() ? '...' : ''}}
+      </button>
 
     @if (error()) {
       <mat-error class="server-error">{{ error() }}</mat-error>
