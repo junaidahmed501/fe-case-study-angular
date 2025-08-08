@@ -79,7 +79,6 @@ export class AuthFacadeService {
   logout(): void {
     this.clearToken();
     this.authStore.clearAuthentication();
-    // Signal is updated via subscription to isAuthenticated$
   }
 
   /**

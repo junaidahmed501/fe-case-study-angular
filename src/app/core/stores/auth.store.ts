@@ -9,6 +9,12 @@ export class AuthStore {
     user: null
   });
 
+  /*
+    * Signal to track authentication state.
+    * Not implemented due to time constraints
+   */
+  // readonly loading = signal(false);
+
   get isAuthenticated$(): Observable<boolean> {
     return new Observable<boolean>(observer => {
       this.authState$.subscribe(state => {
