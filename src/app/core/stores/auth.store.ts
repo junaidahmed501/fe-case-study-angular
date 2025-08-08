@@ -25,6 +25,10 @@ export class AuthStore {
     });
   }
 
+  /**
+   * Set authenticated state with user data
+   * @param user The authenticated user's data
+   */
   setAuthenticated(user: AuthResponse['user']): void {
     this.authState$.next({
       isAuthenticated: true,
@@ -32,6 +36,9 @@ export class AuthStore {
     });
   }
 
+  /**
+   * Clear authentication state
+   */
   clearAuthentication(): void {
     this.authState$.next({
       isAuthenticated: false,

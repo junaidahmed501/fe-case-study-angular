@@ -34,6 +34,20 @@ export class AuthFacadeService {
   }
 
   /**
+   * Creates a form group for login
+   */
+  createLoginForm(): LoginFormGroup {
+    return this.formService.createLoginForm();
+  }
+
+  /**
+   * Prepares login data from form values
+   */
+  prepareLoginData(formValues: LoginFormValues): LoginFormValues {
+    return this.formService.prepareLoginData(formValues);
+  }
+
+  /**
    * Login the user
    * @param username - The username
    * @param password - The password
@@ -58,48 +72,29 @@ export class AuthFacadeService {
 
   /**
    * Check if the user is authenticated
-   * @returns True if authenticated, false otherwise
    */
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
 
-  /**
-   * Get auth token from storage
-   * @returns The stored token or null if not found
+    /**
+   * Get the authentication token from local storage
    */
   getToken(): string | null {
-    return this.authService.getToken();
+    return localStorage.getItem('authToken');
   }
 
   /**
-   * Save auth token to storage
-   * @param token - The token to save
+   * Save the authentication token to local storage
    */
-  saveToken(token: string): void {
-    this.authService.saveToken(token);
+  private saveToken(token: string): void {
+    localStorage.setItem('authToken', token);
   }
 
   /**
-   * Remove auth token from storage
+   * Clear the authentication token from local storage
    */
-  clearToken(): void {
-    this.authService.clearToken();
-  }
-
-  /**
-   * Create a login form
-   * @returns A FormGroup for the login form
-   */
-  createLoginForm(): LoginFormGroup {
-    return this.formService.createLoginForm();
-  }
-
-  /**
-   * Prepare login data for submission
-   * @param formValue The form values
-   */
-  prepareLoginData(formValue: Partial<LoginFormValues>): LoginFormValues {
-    return this.formService.prepareLoginData(formValue);
+  private clearToken(): void {
+    localStorage.removeItem('authToken');
   }
 }

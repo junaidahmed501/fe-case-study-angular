@@ -20,32 +20,25 @@ import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormPageComponent implements OnInit, OnDestroy {
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private facade = inject(UsersFacadeService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly facade = inject(UsersFacadeService);
 
-  // Using signals for reactive state management
-  readonly userId = signal<string | null>(null);
+    readonly userId = signal<string | null>(null);
   readonly user = signal<User | null>(null);
   readonly loading = this.facade.loading;
   readonly error = this.facade.error;
-
-  // Computed property with correct logic
   readonly isEditMode = computed(() => !!this.userId() && this.userId() !== 'create');
 
-  // For cleanup
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    // Get the ID parameter from the route
     this.route.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         const id = params.get('id');
-        // Set the userId signal
         this.userId.set(id);
 
-        // If we have an ID and it's not 'create', load the user
         if (id && id !== 'create') {
           this.loadUser(id);
         }
@@ -55,6 +48,27 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  handleSubmit(form: UserFormGroup | null): void {
+    if (form && form.valid) {
+      const formValues = form.getRawValue();
+      const currentUserId = this.isEditMode() ? this.user()?.id : undefined;
+
+      const userData = this.facade.prepareUserData(formValues, currentUserId);
+
+      this.facade.saveUser(userData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(result => {
+          if (result.success) {
+            this.goBack();
+          }
+        });
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/users']);
   }
 
   private loadUser(userId: string): void {
@@ -68,29 +82,5 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
           this.router.navigate(['/users']);
         }
       });
-  }
-
-  handleSubmit(form: UserFormGroup | null): void {
-    if (form && form.valid) {
-      const formValues = form.getRawValue();
-      const currentUserId = this.isEditMode() ? this.user()?.id : undefined;
-
-      // Use our unified prepare method that handles both create and update
-      const userData = this.facade.prepareUserData(formValues, currentUserId);
-
-      // Use the unified save method that handles both create and update
-      this.facade.saveUser(userData)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(result => {
-          if (result.success) {
-            this.goBack();
-          }
-          // Error handling is done in the facade and displayed via the error signal
-        });
-    }
-  }
-
-  goBack(): void {
-    this.router.navigate(['/users']);
   }
 }

@@ -39,7 +39,7 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent {
-  private facade = inject(UsersFacadeService);
+  private readonly facade = inject(UsersFacadeService);
 
   user: InputSignal<User | null> = input<User | null>(null);
 
@@ -47,17 +47,12 @@ export class UserFormComponent {
   onSubmit: OutputEmitterRef<UserFormGroup | null> = output();
   onCancel: OutputEmitterRef<void> = output();
 
-  // Use a signal for the form to allow for reactive updates
   form = signal<UserFormGroup | null>(null);
-
-  // Computed property for template conditions
   isEditMode = computed(() => !!this.user()?.id);
 
   constructor() {
-    // Use effect to reactively update form when user changes
     effect(() => {
       const userData = this.user();
-      // Recreate the form with the updated user data through the facade
       this.form.set(this.facade.createUserForm(userData));
     });
   }

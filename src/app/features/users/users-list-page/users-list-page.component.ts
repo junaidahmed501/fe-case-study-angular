@@ -25,8 +25,8 @@ export class UsersListPageComponent implements OnInit {
   private readonly usersFacade = inject(UsersFacadeService);
   private readonly authFacade = inject(AuthFacadeService);
 
-  usersSignal: Signal<User[]> = this.usersFacade.users;
-  loading: Signal<boolean> = this.usersFacade.loading;
+  readonly usersSignal: Signal<User[]> = this.usersFacade.users;
+  readonly loading: Signal<boolean> = this.usersFacade.loading;
 
   ngOnInit(): void {
     this.usersFacade.loadUsers();

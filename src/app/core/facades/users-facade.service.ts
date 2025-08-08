@@ -15,16 +15,17 @@ export interface OperationResult<T> {
 
 @Injectable({ providedIn: 'root' })
 export class UsersFacadeService {
-  private store = inject(UserStore);
-  private api = inject(UsersService);
-  private formService = inject(UserFormService);
+  private readonly store = inject(UserStore);
+  private readonly api = inject(UsersService);
+  private readonly formService = inject(UserFormService);
 
-  // Expose state as readonly signals
-  users = this.store.users.asReadonly();
-  loading = this.store.loading.asReadonly();
-  error = this.store.error.asReadonly();
+  readonly users = this.store.users.asReadonly();
+  readonly loading = this.store.loading.asReadonly();
+  readonly error = this.store.error.asReadonly();
 
-  // User service methods
+    /**
+   * Load all users from the API
+   */
   loadUsers(): void {
     this.store.setLoading(true);
     this.api.getUsers().pipe(
@@ -86,11 +87,21 @@ export class UsersFacadeService {
     );
   }
 
-  // Form service methods
+  /**
+   * Create a user form with optional initial data
+   * @param user Optional user data to populate the form
+   * @returns A typed form group for user data
+   */
   createUserForm(user: User | null = null): UserFormGroup {
     return this.formService.createUserForm(user);
   }
 
+  /**
+   * Prepare user data from form values for API submission
+   * @param formValues The form values to process
+   * @param userId Optional user ID for updates
+   * @returns Data object ready for API
+   */
   prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
     return this.formService.prepareUserData(formValues, userId);
   }

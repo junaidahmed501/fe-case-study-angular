@@ -17,8 +17,8 @@ import {MatIconModule} from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersListComponent {
-  users = input.required<User[]>();
-  edit: OutputEmitterRef<string> = output();
+  readonly users = input.required<User[]>();
+  readonly edit: OutputEmitterRef<string> = output();
 
-  displayedColumns: string[] = ['username', 'role', 'actions'];
+  readonly displayedColumns: string[] = ['username', 'role', 'actions'];
 }

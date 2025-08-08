@@ -1,7 +1,11 @@
-import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthFacadeService } from '../facades/auth-facade.service';
+import {inject} from '@angular/core';
+import {CanActivateFn, Router} from '@angular/router';
+import {AuthFacadeService} from '../facades/auth-facade.service';
 
+/**
+ * Auth guard to protect routes that require authentication
+ * Redirects to the auth page if the user is not authenticated
+ */
 export const authGuard: CanActivateFn = () => {
   const authFacade = inject(AuthFacadeService);
   const router = inject(Router);
@@ -12,6 +16,6 @@ export const authGuard: CanActivateFn = () => {
   }
 
   // If not authenticated, redirect to auth page
-  router.navigate(['/auth'], {  replaceUrl: true});
+  router.navigate(['/auth'], { replaceUrl: true });
   return false;
 };

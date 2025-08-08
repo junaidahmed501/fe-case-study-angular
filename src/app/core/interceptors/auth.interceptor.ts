@@ -5,13 +5,14 @@ import {BehaviorSubject, catchError, filter, Observable, switchMap, take, throwE
 import {AuthFacadeService} from '../facades/auth-facade.service';
 import {AUTH_API} from '../../shared/constants/api';
 
-// Token refresh logic
 let isRefreshing = false;
 const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 /**
- * Interceptor that adds the authentication token to outgoing requests
- * and handles token refresh on 401 errors
+ * Auth Interceptor - adds auth token to requests and handles 401 errors
+ * @param req The outgoing request
+ * @param next The next handler in the chain
+ * @returns The processed request observable
  */
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
@@ -48,6 +49,9 @@ export const authInterceptor: HttpInterceptorFn = (
 
 /**
  * Adds the auth token to the request headers
+ * @param req Original request
+ * @param token Authentication token
+ * @returns Cloned request with auth header
  */
 function addTokenToRequest(req: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
   return req.clone({
@@ -59,7 +63,11 @@ function addTokenToRequest(req: HttpRequest<unknown>, token: string): HttpReques
 
 /**
  * Handles 401 Unauthorized errors by attempting to refresh token
- * In a real application, you would implement proper token refresh logic here
+ * @param req Original request that failed
+ * @param next Next handler to retry the request
+ * @param authFacade Auth facade service
+ * @param router Router for navigation
+ * @returns Observable of the retried request or error
  */
 function handleUnauthorizedError(
   req: HttpRequest<unknown>,
@@ -67,20 +75,11 @@ function handleUnauthorizedError(
   authFacade: AuthFacadeService,
   router: Router
 ): Observable<any> {
-  // In a real app with refresh tokens, you'd implement token refresh here
-  // For this example, we'll just log out the user if their token is invalid
-
   // This prevents multiple parallel auth failures from all trying to refresh
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null);
 
-    // For demonstration - in a real app you'd call refresh token API here
-    // return authFacade.refreshToken().pipe(
-    //   switchMap(token => {
-    //     isRefreshing = false;
-    //     refreshTokenSubject.next(token);
-    //     return next(addTokenToRequest(req, token));
     //   }),
     //   catchError(err => {
     //     isRefreshing = false;

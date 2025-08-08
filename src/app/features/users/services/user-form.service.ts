@@ -6,11 +6,12 @@ import {noTestUsernameValidator} from '../../../shared/validators/username.valid
 
 @Injectable({ providedIn: 'root' })
 export class UserFormService {
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
 
   /**
    * Creates a form group for user creation or editing
    * @param user Optional user data to populate the form
+   * @returns Typed user form group
    */
   createUserForm(user: User | null = null): UserFormGroup {
     // Create the form with basic validators
@@ -28,21 +29,17 @@ export class UserFormService {
       // For new users, password is required
       form.get('password')?.addValidators(Validators.required);
     }
-    // else {
-    //   // For existing users, password is optional but if provided must meet requirements
-    //   form.get('password')?.setValidators(
-    //     (control) => control.value ? Validators.minLength(3)(control) : null
-    //   );
-    // }
+
     form.get('password')?.updateValueAndValidity();
 
     return form;
   }
 
   /**
-   * Prepares user data from form values
+   * Prepares user data from form values for API submission
    * @param formValues Form values from the user form
    * @param userId Optional user ID for updates
+   * @returns Data object ready for API (either CreateUserDto or UpdateUserDto)
    */
   prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
     // Base user data from form

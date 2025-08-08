@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, inject, signal, WritableSignal} from '@angular/core';
-import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatCard} from '@angular/material/card';
 import {ReactiveFormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -7,6 +7,7 @@ import {MatButton} from '@angular/material/button';
 import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
 import {LoginFormGroup} from '../../../shared/models/forms/login-form.model';
 import {FormErrorComponent} from '../../../shared/components/form-error/form-error.component';
+import {MatError} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-login-page',

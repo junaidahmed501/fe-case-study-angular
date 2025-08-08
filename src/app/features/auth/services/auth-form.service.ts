@@ -4,10 +4,11 @@ import {LoginFormControls, LoginFormGroup, LoginFormValues} from '../../../share
 
 @Injectable({ providedIn: 'root' })
 export class AuthFormService {
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
 
   /**
    * Creates a form group for user login
+   * @returns Typed login form group
    */
   createLoginForm(): LoginFormGroup {
     return this.fb.group<LoginFormControls>({
@@ -25,6 +26,7 @@ export class AuthFormService {
   /**
    * Prepares login data for submission
    * @param formValue The form values
+   * @returns Sanitized login form values
    */
   prepareLoginData(formValue: Partial<LoginFormValues>): LoginFormValues {
     return {
