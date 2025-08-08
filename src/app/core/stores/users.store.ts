@@ -1,30 +1,43 @@
-import { Injectable, signal } from '@angular/core';
-import { User } from '../../shared/models/user';
+import {Injectable, signal} from '@angular/core';
+import {User} from '../../shared/models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserStore {
-  users = signal<User[]>([]);
-  user = signal<User | null>(null);
-  loading = signal(false);
-  error = signal('');
+  readonly users = signal<User[]>([]);
+  readonly user = signal<User | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal('');
 
-  setUsers(newUsers: User[]) {
+  /**
+   * Set the users collection in the store
+   * @param newUsers Array of users to set
+   */
+  setUsers(newUsers: User[]): void {
     this.users.set(newUsers);
   }
 
-  setUser(newUser: User) {
-    this.user.set(newUser);
-  }
-
-  setLoading(value: boolean) {
+  /**
+   * Set the loading state
+   * @param value Loading state boolean
+   */
+  setLoading(value: boolean): void {
     this.loading.set(value);
   }
 
-  setError(message: string) {
+  /**
+   * Set the error message
+   * @param message Error message to set
+   */
+  setError(message: string): void {
     this.error.set(message);
   }
 
-  upsertUser(user: User) {
+  /**
+   * Add or update a user in the collection
+   * If the user exists (by ID), it will be updated, otherwise added
+   * @param user The user to add or update
+   */
+  upsertUser(user: User): void {
     const current = this.users();
     const index = current.findIndex(u => u.id === user.id);
     if (index === -1) {

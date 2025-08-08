@@ -1,0 +1,25 @@
+<div class="users-page-container">
+  <div class="page-header">
+    <h2>Users</h2>
+    <div class="page-actions">
+      <button mat-raised-button color="primary" (click)="goToNew()">
+        <mat-icon>add</mat-icon> Add User
+      </button>
+      <div class="spacer"></div>
+      <button mat-raised-button color="warn" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <app-users-list
+      [users]="usersSignal()"
+      (edit)="goToEdit($event)"
+    />
+  }
+</div>

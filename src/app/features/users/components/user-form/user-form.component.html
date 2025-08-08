@@ -1,0 +1,42 @@
+@let userForm = form();
+
+@if (userForm) {
+  <form [formGroup]="userForm" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" />
+      <app-form-error
+        [control]="$any(userForm.get('username'))"
+      ></app-form-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="user">User</mat-option>
+      </mat-select>
+      <app-form-error
+        [control]="$any(userForm.get('role'))"
+      ></app-form-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+      @if (isEditMode()) {
+        <mat-hint>Leave blank to keep the current password</mat-hint>
+      }
+      <app-form-error
+        [control]="$any(userForm.get('password'))"
+      ></app-form-error>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-flat-button color="primary" type="submit">
+        {{ isEditMode() ? 'Update User' : 'Create User' }}
+      </button>
+      <button mat-stroked-button type="button" (click)="onCancel.emit()">Cancel</button>
+    </div>
+  </form>
+}

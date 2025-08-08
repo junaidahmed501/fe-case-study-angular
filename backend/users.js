@@ -42,7 +42,7 @@ router.post('/create', (req, res) => {
   }
 
   const newUser = {
-    id: Date.now(),
+    id: Date.now().toString(),
     username,
     password,
     role,
@@ -53,7 +53,7 @@ router.post('/create', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const id = +req.params.id;
+  const id = req.params.id;
   const index = users.findIndex((u) => u.id === id);
 
   if (index === -1) return res.status(404).json({ message: 'User not found' });

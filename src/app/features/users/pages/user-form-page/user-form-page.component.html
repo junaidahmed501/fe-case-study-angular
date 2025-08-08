@@ -1,0 +1,24 @@
+
+<mat-card class="miniature-card">
+
+<h2>{{ user()?.id ? 'Edit' : 'Create' }} User</h2>
+
+@if ( loading()) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading...</p>
+  </div>
+} @else {
+
+  <app-user-form
+    [user]="user()"
+    (onSubmit)="handleSubmit($event)"
+    (onCancel)="goBack()"
+  />
+  @if (error()) {
+    <div class="error-message">
+      <p>{{ error() }}</p>
+    </div>
+  }
+}
+</mat-card>

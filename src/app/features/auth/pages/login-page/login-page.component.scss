@@ -1,0 +1,36 @@
+.login-card {
+  max-width: 400px;
+  margin: 5rem auto;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #3f51b5;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  width: 100%;
+  margin-top: 1.5rem;
+  height: 44px;
+}
+
+.server-error {
+  margin-top: 1rem;
+  text-align: center;
+  padding: 8px;
+  border-radius: 4px;
+}
