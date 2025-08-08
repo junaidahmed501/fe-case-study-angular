@@ -1,5 +1,4 @@
 import {Routes} from '@angular/router';
-import {ROUTES} from '../../shared/constants/routes.constants';
 
 export const USERS_ROUTES: Routes = [
   {
@@ -7,7 +6,7 @@ export const USERS_ROUTES: Routes = [
     loadComponent: () => import('./users-list-page/users-list-page.component').then(c => c.UsersListPageComponent)
   },
   {
-    path: ROUTES.CREATE,
+    path: 'create',
     loadComponent: () => import('./user-form-page/user-form-page.component').then(c => c.UserFormPageComponent)
   },
   {

@@ -1,6 +1,7 @@
 import {inject} from '@angular/core';
 import {CanActivateFn, Router} from '@angular/router';
 import {AuthFacadeService} from '../facades/auth-facade.service';
+import {ROUTES} from '../../shared/constants/routes.constants';
 
 /**
  * Unauthenticated guard to protect routes that should only be accessed by non-authenticated users
@@ -12,7 +13,7 @@ export const unauthenticatedGuard: CanActivateFn = () => {
 
   // If the user is already authenticated, redirect to users page
   if (authFacade.isAuthenticated()) {
-    router.navigate(['/users'], { replaceUrl: true });
+    router.navigate([ROUTES.USERS], { replaceUrl: true });
     return false;
   }
 

@@ -43,7 +43,6 @@ export class UserFormComponent {
 
   user: InputSignal<User | null> = input<User | null>(null);
 
-  onSave: OutputEmitterRef<Partial<User>> = output();
   onSubmit: OutputEmitterRef<UserFormGroup | null> = output();
   onCancel: OutputEmitterRef<void> = output();
 

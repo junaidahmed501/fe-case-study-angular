@@ -3,13 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model';
 import {environment} from '../../../environments/environment';
-import {USERS_API} from '../../shared/constants/api';
+import {API} from '../../shared/constants/api.constants';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private readonly http: HttpClient = inject(HttpClient);
 
-  private readonly apiUrl: string = `${environment.apiBaseUrl}/${USERS_API.BASE}`;
+  private readonly apiUrl: string = `${environment.apiBaseUrl}/${API.USERS_BASE}`;
 
   /**
    * Get all users from the API
@@ -34,7 +34,7 @@ export class UsersService {
    * @returns Observable of the created user
    */
   addUser(userData: CreateUserDto): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/${USERS_API.CREATE}`, userData);
+    return this.http.post<User>(`${environment.apiBaseUrl}/${API.USERS_CREATE}`, userData);
   }
 
   /**

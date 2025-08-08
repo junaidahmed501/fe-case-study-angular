@@ -1,20 +1,16 @@
 /**
  * Application-wide route constants
+ * Simple flat structure for easier maintenance
  */
 export const ROUTES = {
-  AUTH: 'auth',
-  USERS: 'users',
-  CREATE: 'create'
-};
+  // Auth routes
+  AUTH: '/auth',
+  LOGIN: '/auth/login',
 
-/**
- * API endpoint path constants
- */
-export const API_PATHS = {
-  AUTH: {
-    LOGIN: 'login'
-  },
-  USERS: {
-    BASE: 'users'
-  }
+  // User routes
+  USERS: '/users',
+  USER_CREATE: '/users/create',
+
+  // Helper method for dynamic routes
+  getUserEdit: (id: string) => `/users/${id}`
 };

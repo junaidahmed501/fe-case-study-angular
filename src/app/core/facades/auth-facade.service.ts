@@ -6,6 +6,7 @@ import {AuthStore} from '../stores/auth.store';
 import {AuthFormService} from '../../features/auth/services/auth-form.service';
 import {LoginFormGroup, LoginFormValues} from '../../shared/models/forms/login-form.model';
 import {AuthResponse} from '../../shared/models/auth-response.model';
+import {STORAGE} from '../../shared/constants/storage.constants';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
@@ -77,24 +78,24 @@ export class AuthFacadeService {
     return !!this.getToken();
   }
 
-    /**
+  /**
    * Get the authentication token from local storage
    */
   getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem(STORAGE.AUTH_TOKEN);
   }
 
   /**
    * Save the authentication token to local storage
    */
   private saveToken(token: string): void {
-    localStorage.setItem('authToken', token);
+    localStorage.setItem(STORAGE.AUTH_TOKEN, token);
   }
 
   /**
    * Clear the authentication token from local storage
    */
   private clearToken(): void {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem(STORAGE.AUTH_TOKEN);
   }
 }

@@ -7,6 +7,7 @@ import {CommonModule} from '@angular/common';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {User} from '../../../shared/models/user.model';
 import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
+import {ROUTES} from '../../../shared/constants/routes.constants';
 
 @Component({
   selector: 'app-user-form-page',
@@ -24,7 +25,7 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly facade = inject(UsersFacadeService);
 
-    readonly userId = signal<string | null>(null);
+  readonly userId = signal<string | null>(null);
   readonly user = signal<User | null>(null);
   readonly loading = this.facade.loading;
   readonly error = this.facade.error;
@@ -68,7 +69,7 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/users']);
+    this.router.navigate([ROUTES.USERS]);
   }
 
   private loadUser(userId: string): void {
@@ -79,7 +80,7 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
           this.user.set(userData);
         },
         error: () => {
-          this.router.navigate(['/users']);
+          this.goBack();
         }
       });
   }

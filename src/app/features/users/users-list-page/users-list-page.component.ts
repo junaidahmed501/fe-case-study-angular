@@ -7,6 +7,7 @@ import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
 import {User} from '../../../shared/models/user.model';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {ROUTES} from '../../../shared/constants/routes.constants';
 
 @Component({
   selector: 'app-users-list-page',
@@ -33,16 +34,15 @@ export class UsersListPageComponent implements OnInit {
   }
 
   goToNew(): void {
-    // todo: use constants for routes
-    this.router.navigate(['/users/create']);
+    this.router.navigate([ROUTES.USER_CREATE]);
   }
 
   goToEdit(id: string): void {
-    this.router.navigate(['/users', id]);
+    this.router.navigate([ROUTES.getUserEdit(id)]);
   }
 
   logout(): void {
     this.authFacade.logout();
-    this.router.navigate(['/auth']);
+    this.router.navigate([ROUTES.AUTH]);
   }
 }

@@ -6,15 +6,15 @@ import {LoginPageComponent} from './features/auth/login-page/login-page.componen
 
 export const routes: Routes = [
   {
-    path: ROUTES.AUTH,
+    path: 'auth',
     canActivate: [unauthenticatedGuard],
     component: LoginPageComponent,
   },
   {
-    path: ROUTES.USERS,
+    path: 'users',
     canActivate: [authGuard],
     loadChildren: () => import('./features/users/users.routes').then(r => r.USERS_ROUTES),
   },
-  { path: '', redirectTo: `/${ROUTES.AUTH}`, pathMatch: 'full' },
-  { path: '**', redirectTo: `/${ROUTES.AUTH}` }
+  { path: '', redirectTo: ROUTES.AUTH, pathMatch: 'full' },
+  { path: '**', redirectTo: ROUTES.AUTH }
 ]

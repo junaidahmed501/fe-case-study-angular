@@ -2,16 +2,16 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
-import {AUTH_API} from '../../shared/constants/api';
-import {STORAGE_KEYS} from '../../shared/constants/storage.constants';
+import {API} from '../../shared/constants/api.constants';
+import {STORAGE} from '../../shared/constants/storage.constants';
 import {AuthResponse} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http: HttpClient = inject(HttpClient);
 
-  private readonly loginUrl: string = `${environment.apiBaseUrl}/${AUTH_API.LOGIN}`;
-  private readonly tokenKey: string = STORAGE_KEYS.AUTH_TOKEN;
+  private readonly loginUrl: string = `${environment.apiBaseUrl}/${API.AUTH_LOGIN}`;
+  private readonly tokenKey: string = STORAGE.AUTH_TOKEN;
 
   /**
    * Login method to authenticate a user.
