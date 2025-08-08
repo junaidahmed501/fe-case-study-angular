@@ -1,5 +1,5 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
+import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatCard} from '@angular/material/card';
 import {ReactiveFormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -10,7 +10,6 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
 
 @Component({
   selector: 'app-login-page',
-  standalone: true,
   imports: [
     MatFormField,
     MatInput,
@@ -19,7 +18,8 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
     MatCard,
     ReactiveFormsModule,
     MatButton,
-    FormErrorComponent
+    FormErrorComponent,
+    MatError
   ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
@@ -45,11 +45,7 @@ export class LoginPageComponent {
         }
       });
     } else {
-      this.form.markAllAsTouched()
-      // Mark all fields as touched to show validation errors
-      // Object.keys(this.form.controls).forEach(key => {
-      //   this.form.get(key)?.markAsTouched();
-      // });
+      this.form.markAllAsTouched();
     }
   }
 }

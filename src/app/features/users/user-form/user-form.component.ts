@@ -12,7 +12,6 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
 
 @Component({
   selector: 'app-user-form',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

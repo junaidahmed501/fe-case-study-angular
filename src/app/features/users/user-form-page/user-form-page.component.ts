@@ -10,7 +10,6 @@ import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
 
 @Component({
   selector: 'app-user-form-page',
-  standalone: true,
   imports: [
     UserFormComponent,
     CommonModule,

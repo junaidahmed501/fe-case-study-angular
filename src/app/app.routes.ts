@@ -2,12 +2,13 @@ import {Routes} from '@angular/router';
 import {authGuard} from './core/guards/auth.guard';
 import {unauthenticatedGuard} from './core/guards/unauthenticated.guard';
 import {ROUTES} from './shared/constants/routes.constants';
+import {LoginPageComponent} from './features/auth/login-page/login-page.component';
 
 export const routes: Routes = [
   {
     path: ROUTES.AUTH,
     canActivate: [unauthenticatedGuard],
-    loadComponent: () => import('./features/auth/login-page/login-page.component').then(m => m.LoginPageComponent),
+    component: LoginPageComponent,
   },
   {
     path: ROUTES.USERS,

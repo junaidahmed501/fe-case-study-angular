@@ -1,10 +1,11 @@
 import {Component, input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {AbstractControl, FormControl} from '@angular/forms';
-import {MatError} from '@angular/material/input';
+import {MatError} from '@angular/material/form-field';
 
 @Component({
   selector: 'app-form-error',
+  standalone: true,
   imports: [CommonModule, MatError],
   template: `
     @if (shouldShowErrors()) {
@@ -32,10 +33,12 @@ export class FormErrorComponent {
   control = input.required<AbstractControl | FormControl>();
 
   /**
-   * Check if errors should be displayed
+   * Determines whether errors should be displayed
    */
   shouldShowErrors(): boolean {
-    const ctrl = this.control();
-    return !!ctrl && ctrl.invalid && (ctrl.touched || ctrl.dirty);
+    const control = this.control();
+    return control &&
+           control.invalid &&
+           (control.dirty || control.touched);
   }
 }

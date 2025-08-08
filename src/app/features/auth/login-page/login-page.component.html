@@ -8,7 +8,7 @@
       <app-form-error [control]="$any(form.get('username'))"></app-form-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field>
       <mat-label>Password</mat-label>
       <input matInput type="password" formControlName="password"/>
       <app-form-error [control]="$any(form.get('password'))"></app-form-error>
@@ -19,7 +19,7 @@
     </button>
 
     @if (error()) {
-      <p class="server-error">{{ error() }}</p>
+      <mat-error class="server-error">{{ error() }}</mat-error>
     }
   </form>
 </mat-card>

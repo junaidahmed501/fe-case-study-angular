@@ -10,7 +10,6 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-users-list-page',
-  standalone: true,
   imports: [
     UsersListComponent,
     MatButton,

@@ -6,7 +6,6 @@ import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-users-list',
-  standalone: true,
   imports: [
     MatButtonModule,
     MatTableModule,
