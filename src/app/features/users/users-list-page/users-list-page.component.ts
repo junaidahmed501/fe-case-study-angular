@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnInit, Signal} from '@angular/core';
 import {UsersListComponent} from '../users-list/users-list.component';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
@@ -17,7 +17,8 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
     MatProgressSpinner
   ],
   templateUrl: './users-list-page.component.html',
-  styleUrl: './users-list-page.component.scss'
+  styleUrl: './users-list-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UsersListPageComponent implements OnInit {
   private readonly router = inject(Router);

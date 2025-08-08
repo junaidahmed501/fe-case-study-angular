@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {UserFormComponent} from '../user-form/user-form.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UsersFacadeService} from '../../../core/facades/users-facade.service';
@@ -16,7 +16,8 @@ import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
     MatProgressSpinner
   ],
   templateUrl: './user-form-page.component.html',
-  styleUrl: './user-form-page.component.scss'
+  styleUrl: './user-form-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormPageComponent implements OnInit, OnDestroy {
   private router = inject(Router);

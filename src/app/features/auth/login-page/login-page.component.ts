@@ -1,4 +1,4 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal, WritableSignal} from '@angular/core';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatCard} from '@angular/material/card';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -14,7 +14,6 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
     MatFormField,
     MatInput,
     MatLabel,
-    MatFormField,
     MatCard,
     ReactiveFormsModule,
     MatButton,
@@ -22,7 +21,8 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
     MatError
   ],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+  styleUrl: './login-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent {
   private readonly authFacade: AuthFacadeService = inject(AuthFacadeService);

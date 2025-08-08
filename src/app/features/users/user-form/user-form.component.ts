@@ -1,4 +1,15 @@
-import {Component, computed, effect, inject, input, InputSignal, output, OutputEmitterRef, signal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  InputSignal,
+  output,
+  OutputEmitterRef,
+  signal
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule, MatHint} from '@angular/material/form-field';
@@ -12,6 +23,7 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
 
 @Component({
   selector: 'app-user-form',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -23,7 +35,8 @@ import {FormErrorComponent} from '../../../shared/components/form-error/form-err
     FormErrorComponent
   ],
   templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.scss'
+  styleUrl: './user-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent {
   private facade = inject(UsersFacadeService);
@@ -51,11 +64,6 @@ export class UserFormComponent {
 
   submit(): void {
     if (this.form()) {
-      // // Mark all fields as touched to show validation errors
-      // Object.keys(this.form()!.controls).forEach(key => {
-      //   const control = this.form()!.get(key);
-      //   control?.markAsTouched();
-      // });
       this.form()?.markAllAsTouched();
 
       if (this.form()!.valid) {
