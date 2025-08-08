@@ -9,7 +9,6 @@ import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model
 import {FormGroup} from '@angular/forms';
 import {signal} from '@angular/core';
 
-
 describe('UsersFacadeService', () => {
   let facade: UsersFacadeService;
   let mockUserStore: Partial<UserStore>;

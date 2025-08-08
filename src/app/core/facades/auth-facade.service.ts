@@ -4,9 +4,9 @@ import {finalize, Observable, tap} from 'rxjs';
 import {AuthService} from '../services/auth.service';
 import {AuthStore} from '../stores/auth.store';
 import {AuthFormService} from '../../features/auth/services/auth-form.service';
-import {LoginFormGroup, LoginFormValues} from '../../shared/models/forms/login-form.model';
 import {AuthResponse} from '../../shared/models/auth-response.model';
 import {STORAGE} from '../../shared/constants/storage.constants';
+import {LoginFormGroup, LoginFormValues} from '../../shared/models/login-form.model';
 
 /**
  * Facade for authentication operations that coordinates between auth service and store

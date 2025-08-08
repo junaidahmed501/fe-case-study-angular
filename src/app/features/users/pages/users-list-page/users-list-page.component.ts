@@ -1,13 +1,13 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit, Signal} from '@angular/core';
-import {UsersListComponent} from '../users-list/users-list.component';
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
-import {UsersFacadeService} from '../../../core/facades/users-facade.service';
-import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
-import {User} from '../../../shared/models/user.model';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {ROUTES} from '../../../shared/constants/routes.constants';
+import {UsersListComponent} from '../../components/users-list/users-list.component';
+import {UsersFacadeService} from '../../../../core/facades/users-facade.service';
+import {AuthFacadeService} from '../../../../core/facades/auth-facade.service';
+import {User} from '../../../../shared/models/user.model';
+import {APP_ROUTES} from '../../../../shared/constants/routes.constants';
 
 /**
  * Container component for the users list view
@@ -44,7 +44,7 @@ export class UsersListPageComponent implements OnInit {
    * Navigates to create user page
    */
   goToNew(): void {
-    this.router.navigate([ROUTES.USER_CREATE]);
+    this.router.navigate([APP_ROUTES.USER_CREATE]);
   }
 
   /**
@@ -52,7 +52,7 @@ export class UsersListPageComponent implements OnInit {
    * @param id ID of the user to edit
    */
   goToEdit(id: string): void {
-    this.router.navigate([ROUTES.getUserEdit(id)]);
+    this.router.navigate([APP_ROUTES.getUserEdit(id)]);
   }
 
   /**
@@ -60,6 +60,6 @@ export class UsersListPageComponent implements OnInit {
    */
   logout(): void {
     this.authFacade.logout();
-    this.router.navigate([ROUTES.AUTH]);
+    this.router.navigate([APP_ROUTES.AUTH]);
   }
 }

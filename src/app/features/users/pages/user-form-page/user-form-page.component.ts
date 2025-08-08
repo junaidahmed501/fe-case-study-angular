@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {UserFormComponent} from '../user-form/user-form.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {Subject, takeUntil} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {User} from '../../../shared/models/user.model';
-import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
-import {ROUTES} from '../../../shared/constants/routes.constants';
 import {MatCard} from '@angular/material/card';
+import {UserFormComponent} from '../../components/user-form/user-form.component';
+import {UsersFacadeService} from '../../../../core/facades/users-facade.service';
+import {User} from '../../../../shared/models/user.model';
+import {APP_ROUTES} from '../../../../shared/constants/routes.constants';
+import {UserFormGroup} from '../../../../shared/models/user-form.model';
 
 /**
  * Container component for user creation and editing
@@ -88,7 +88,7 @@ export class UserFormPageComponent implements OnInit, OnDestroy {
    * Navigates back to users list
    */
   goBack(): void {
-    this.router.navigate([ROUTES.USERS]);
+    this.router.navigate([APP_ROUTES.USERS]);
   }
 
   /**

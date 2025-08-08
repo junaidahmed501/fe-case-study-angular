@@ -1,7 +1,7 @@
 import {inject} from '@angular/core';
 import {CanActivateFn, Router} from '@angular/router';
 import {AuthFacadeService} from '../facades/auth-facade.service';
-import {ROUTES} from '../../shared/constants/routes.constants';
+import {APP_ROUTES} from '../../shared/constants/routes.constants';
 
 /**
  * Route guard that protects routes requiring authentication
@@ -16,6 +16,6 @@ export const authGuard: CanActivateFn = () => {
     return true;
   }
 
-  router.navigate([ROUTES.AUTH], { replaceUrl: true });
+  router.navigate([APP_ROUTES.AUTH], { replaceUrl: true });
   return false;
 };

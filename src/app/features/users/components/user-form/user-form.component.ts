@@ -16,10 +16,10 @@ import {MatFormFieldModule, MatHint} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {UsersFacadeService} from '../../../core/facades/users-facade.service';
-import {User} from '../../../shared/models/user.model';
-import {UserFormGroup} from '../../../shared/models/forms/user-form.model';
-import {FormErrorComponent} from '../../../shared/components/form-error/form-error.component';
+import {FormErrorComponent} from '../../../../shared/components/form-error/form-error.component';
+import {UsersFacadeService} from '../../../../core/facades/users-facade.service';
+import {User} from '../../../../shared/models/user.model';
+import {UserFormGroup} from '../../../../shared/models/user-form.model';
 
 /**
  * Presentational component that renders user form fields

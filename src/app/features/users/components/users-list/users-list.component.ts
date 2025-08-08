@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, input, output, OutputEmitterRef} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
-import {User} from '../../../shared/models/user.model';
 import {MatTableModule} from '@angular/material/table';
 import {MatIconModule} from '@angular/material/icon';
+import {User} from '../../../../shared/models/user.model';
 
 @Component({
   selector: 'app-users-list',

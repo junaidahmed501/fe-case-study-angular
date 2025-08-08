@@ -2,7 +2,7 @@
  * Application-wide route constants
  * Simple flat structure for easier maintenance
  */
-export const ROUTES = {
+export const APP_ROUTES = {
   // Auth routes
   AUTH: '/auth',
   LOGIN: '/auth/login',

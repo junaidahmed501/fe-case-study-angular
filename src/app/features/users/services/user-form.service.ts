@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {CreateUserDto, UpdateUserDto, User} from '../../../shared/models/user.model';
-import {UserFormGroup, UserFormValues} from '../../../shared/models/forms/user-form.model';
 import {noTestUsernameValidator} from '../../../shared/validators/username.validators';
+import {UserFormGroup, UserFormValues} from '../../../shared/models/user-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserFormService {

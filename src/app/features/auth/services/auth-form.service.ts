@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {LoginFormControls, LoginFormGroup, LoginFormValues} from '../../../shared/models/forms/login-form.model';
+import {LoginFormControls, LoginFormGroup, LoginFormValues} from '../../../shared/models/login-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFormService {

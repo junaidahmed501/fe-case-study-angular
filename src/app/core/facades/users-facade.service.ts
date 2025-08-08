@@ -1,10 +1,10 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, OnDestroy} from '@angular/core';
 import {UserStore} from '../stores/users.store';
 import {UsersService} from '../services/users.service';
-import {catchError, finalize, map, Observable, of, tap} from 'rxjs';
+import {catchError, finalize, map, Observable, of, Subject, takeUntil, tap} from 'rxjs';
 import {UserFormService} from '../../features/users/services/user-form.service';
 import {CreateUserDto, UpdateUserDto, User} from '../../shared/models/user.model';
-import {UserFormGroup, UserFormValues} from '../../shared/models/forms/user-form.model';
+import {UserFormGroup, UserFormValues} from '../../shared/models/user-form.model';
 
 /**
  * Represents the result of user operations that can succeed or fail
@@ -21,10 +21,11 @@ export interface OperationResult<T> {
  * Provides a unified API for components to interact with
  */
 @Injectable({ providedIn: 'root' })
-export class UsersFacadeService {
+export class UsersFacadeService implements OnDestroy {
   private readonly store = inject(UserStore);
   private readonly api = inject(UsersService);
   private readonly formService = inject(UserFormService);
+  private readonly destroy$ = new Subject<void>();
 
   readonly users = this.store.users.asReadonly();
   readonly loading = this.store.loading.asReadonly();
@@ -42,6 +43,7 @@ export class UsersFacadeService {
         this.store.setError('');
       }),
       finalize(() => this.store.setLoading(false)),
+      takeUntil(this.destroy$)
     ).subscribe({
       error: () => {
         this.store.setError('Failed to load users');
@@ -109,4 +111,13 @@ export class UsersFacadeService {
   prepareUserData(formValues: UserFormValues, userId?: string): CreateUserDto | UpdateUserDto {
     return this.formService.prepareUserData(formValues, userId);
   }
+
+  /**
+   * Cleans up subscriptions when service is destroyed
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }
