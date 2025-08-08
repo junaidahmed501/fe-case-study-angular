@@ -5,12 +5,17 @@ import {Router} from '@angular/router';
 import {UsersFacadeService} from '../../../core/facades/users-facade.service';
 import {AuthFacadeService} from '../../../core/facades/auth-facade.service';
 import {User} from '../../../shared/models/user.model';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-users-list-page',
+  standalone: true,
   imports: [
     UsersListComponent,
-    MatButton
+    MatButton,
+    MatIcon,
+    MatProgressSpinner
   ],
   templateUrl: './users-list-page.component.html',
   styleUrl: './users-list-page.component.scss'

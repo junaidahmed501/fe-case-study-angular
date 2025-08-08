@@ -2,6 +2,20 @@
   max-width: 400px;
   margin: 5rem auto;
   padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #3f51b5;
 }
 
 mat-form-field {
@@ -11,10 +25,15 @@ mat-form-field {
 
 button {
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  height: 44px;
 }
 
-p {
-  color: red;
+.server-error {
+  color: #f44336;
   margin-top: 1rem;
+  text-align: center;
+  background-color: rgba(244, 67, 54, 0.1);
+  padding: 8px;
+  border-radius: 4px;
 }
