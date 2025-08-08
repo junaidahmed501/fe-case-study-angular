@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -13,5 +14,5 @@ import {MatToolbarModule} from '@angular/material/toolbar';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  title = 'SFE Tech Task';
+  title = environment.appName;
 }
