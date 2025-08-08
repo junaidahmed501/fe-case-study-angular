@@ -41,3 +41,13 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files - NEVER commit these!
+/src/environments/environment.ts
+/src/environments/environment.development.ts
+/src/environments/environment.production.ts
+/src/environments/environment.*.ts
+.env
+.env.local
+.env.development
+.env.production
