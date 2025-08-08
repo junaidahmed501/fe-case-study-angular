@@ -5,7 +5,6 @@ import {catchError, throwError} from 'rxjs';
 import {AuthFacadeService} from '../facades/auth-facade.service';
 import {API} from '../../shared/constants/api.constants';
 
-
 /**
  * Auth Interceptor - adds auth token to requests and handles 401 errors
  * @param req The outgoing request
@@ -38,7 +37,6 @@ export const authInterceptor: HttpInterceptorFn = (
         authFacade.logout();
         router.navigate(['/auth']);
       }
-
       // For other errors, just pass them through
       return throwError(() => error);
     })

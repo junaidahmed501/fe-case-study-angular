@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {AuthResponse} from '../../shared/models/auth-response.model';
+import {AuthUser} from '../../shared/models/auth-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
-  private readonly authState$ = new BehaviorSubject<{ isAuthenticated: boolean, user: AuthResponse['user'] | null }>({
+  private readonly authState$ = new BehaviorSubject<{ isAuthenticated: boolean, user: AuthUser | null }>({
     isAuthenticated: false,
     user: null
   });
@@ -17,19 +17,11 @@ export class AuthStore {
     });
   }
 
-  get currentUser$(): Observable<AuthResponse['user'] | null> {
-    return new Observable<AuthResponse['user'] | null>(observer => {
-      this.authState$.subscribe(state => {
-        observer.next(state.user);
-      });
-    });
-  }
-
   /**
    * Set authenticated state with user data
    * @param user The authenticated user's data
    */
-  setAuthenticated(user: AuthResponse['user']): void {
+  setAuthenticated(user: AuthUser): void {
     this.authState$.next({
       isAuthenticated: true,
       user

@@ -11,7 +11,6 @@ export const authGuard: CanActivateFn = () => {
   const authFacade = inject(AuthFacadeService);
   const router = inject(Router);
 
-  // Check if the user is authenticated
   if (authFacade.isAuthenticated()) {
     return true;
   }

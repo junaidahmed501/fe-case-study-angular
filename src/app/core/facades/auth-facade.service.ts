@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {Observable, tap} from 'rxjs';
 
 import {AuthService} from '../services/auth.service';
@@ -14,24 +14,33 @@ export class AuthFacadeService {
   private readonly authStore: AuthStore = inject(AuthStore);
   private readonly formService = inject(AuthFormService);
 
+  // Authentication state as a signal - will be exposed for components to consume
+  readonly isAuthenticated = signal<boolean>(false);
+
   get isAuthenticated$(): Observable<boolean> {
     return this.authStore.isAuthenticated$;
   }
 
-  get currentUser$(): Observable<AuthResponse['user'] | null> {
-    return this.authStore.currentUser$;
-  }
-
   /**
    * Initialize the authentication state based on the stored token
+   * Should be called once during app initialization
    */
   initializeAuth(): void {
-    const token = this.getToken();
+    const token = localStorage.getItem(STORAGE.AUTH_TOKEN);
+
     if (token) {
       // If we have token, we consider the user authenticated
-      // In a real app, you might want to validate the token with the server or decode it to get user info
       this.authStore.setAuthenticated({ id: 0, username: '', role: '' }); // Placeholder user
+      this.isAuthenticated.set(true);
+    } else {
+      this.authStore.clearAuthentication();
+      this.isAuthenticated.set(false);
     }
+
+    // Subscribe to future auth state changes to keep signal in sync
+    this.isAuthenticated$.subscribe(isAuthenticated => {
+      this.isAuthenticated.set(isAuthenticated);
+    });
   }
 
   /**
@@ -59,6 +68,7 @@ export class AuthFacadeService {
       tap((response: AuthResponse) => {
         this.saveToken(response.token);
         this.authStore.setAuthenticated(response.user);
+        // Signal is updated via subscription to isAuthenticated$
       })
     );
   }
@@ -69,13 +79,7 @@ export class AuthFacadeService {
   logout(): void {
     this.clearToken();
     this.authStore.clearAuthentication();
-  }
-
-  /**
-   * Check if the user is authenticated
-   */
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+    // Signal is updated via subscription to isAuthenticated$
   }
 
   /**
@@ -85,6 +89,7 @@ export class AuthFacadeService {
     return localStorage.getItem(STORAGE.AUTH_TOKEN);
   }
 
+  // Private methods
   /**
    * Save the authentication token to local storage
    */
